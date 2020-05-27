@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Tcenter</string>
+
+    <string name="app_login_header_text_up_1">Sign In</string>
+    <string name="app_login_header_text_up_2">To Ticket Center</string>
+    <string name="logo_description">Application logo image</string>
+    <string name="logoFormText1">Mobile Number</string>
+    <string name="logoFormText2">Password</string>
+    <string name="signInButtonText">Sign In</string>
+    <string name="forgotPassInfo">Don\'t remember your password?</string>
+    <string name="sendSms">Send SMS</string>
+    <string name="showPass">SHOW</string>
+    <string name="hidePass">HIDE</string>
+    <string name="plusCross">+</string>
+    <string name="toDo">To do</string>
+    <string-array name="spinnerItems">
+        <item>+48</item>
+        <item>+32</item>
+    </string-array>
+</resources>
