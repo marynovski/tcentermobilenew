@@ -1,5 +1,6 @@
 package com.tcenter.tcenter
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
@@ -36,7 +37,7 @@ class LoginActivitty : AppCompatActivity() {
             /** LOGIN SERVICE */
             val ls: Login = Login()
             println("LEST MAKE LS>LOGIN")
-            ls.login(phoneNumber, password)
+            ls.login(phoneNumber, password, applicationContext, getSharedPreferences("userData", Context.MODE_PRIVATE))
         }
 
         /**

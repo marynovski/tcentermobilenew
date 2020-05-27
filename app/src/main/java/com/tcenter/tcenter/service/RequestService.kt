@@ -15,10 +15,10 @@ class RequestService {
 
     val TCENTER_API_URL = "https://www.tcenter.pl/api/v/mobile/"
 
-    fun loginRequestJob(username: String, password: String) : String = runBlocking()
+    fun loginRequestJob(username: String, password: String) = runBlocking()
     {
-        val json = "{\"params\":{\"username\":\"dima\",\"password\":\"dima\"}}}"
-        var jsonResponse = "{}"
+        val json = "{\"params\":{\"username\":\"0048731041224\",\"password\":\"4M6DOFG7\"}}"
+        var jsonResponse: String = "ERROR"
 
         /** http://www.tcenter.pl/api/v/mobile/login */
         val url: URL = URL("http://www.tcenter.pl/api/v/mobile/login")
@@ -26,6 +26,7 @@ class RequestService {
             val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
             conn.requestMethod = "POST"
             conn.setRequestProperty("Content-Type", "application/json; utf-8")
+            conn.setRequestProperty("Charset", "utf-8")
             conn.setRequestProperty("Accept", "application/json")
             conn.setRequestProperty("Authorization", "7f137082d82368af5968aac4150b3854644b5957")
             conn.doOutput = true
@@ -69,7 +70,7 @@ class RequestService {
             val getLoginResponseJob = async(Dispatchers.IO) { loginRequestJob(username, password) }
 
             runBlocking(block = {
-                jsonResponse = getLoginResponseJob.await().toString()
+                jsonResponse = getLoginResponseJob.await()
             })
         }
 

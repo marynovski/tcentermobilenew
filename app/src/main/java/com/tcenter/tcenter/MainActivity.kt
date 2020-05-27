@@ -21,10 +21,10 @@ class MainActivity : AppCompatActivity() {
          * 1.2.1 If true  -> redirect to ticket list activity
          * 1.2.2 If false -> redirect to login activity
          */
-        val sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("userData", Context.MODE_PRIVATE)
         val isAuthenticated: Boolean = sharedPreferences.contains("IS_AUTHENTICATED")
         if (isAuthenticated) {
-            println("ZALOGOWANY")
+            this.redicrectToTicketListActivity()
         } else {
             this.redirectToLoginActivity()
         }
@@ -33,9 +33,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     /** REDIRECT TO LOGIN ACTIVITY */
-    private fun redirectToLoginActivity()
-    {
+    private fun redirectToLoginActivity() {
         val intent = Intent(this, LoginActivitty::class.java)
+        startActivity(intent)
+    }
+
+    private fun redicrectToTicketListActivity()
+    {
+        val intent = Intent(this, TicketListActivity::class.java)
         startActivity(intent)
     }
 }
