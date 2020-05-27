@@ -24,7 +24,12 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("userData", Context.MODE_PRIVATE)
         val isAuthenticated: Boolean = sharedPreferences.contains("IS_AUTHENTICATED")
         if (isAuthenticated) {
-            this.redicrectToTicketListActivity()
+            val isLoggedIn: Boolean = sharedPreferences.getBoolean("IS_AUTHENTICATED", false)
+            if (isLoggedIn) {
+                this.redicrectToTicketListActivity()
+            } else {
+                this.redirectToLoginActivity()
+            }
         } else {
             this.redirectToLoginActivity()
         }

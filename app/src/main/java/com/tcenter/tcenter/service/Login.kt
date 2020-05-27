@@ -1,6 +1,7 @@
 package com.tcenter.tcenter.service
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
 import android.webkit.JsPromptResult
@@ -16,20 +17,21 @@ class Login {
 
 
         //USER DATA
+        val id    = user_data.getInt("id")
         val name    = user_data.getString("name")
         val surname = user_data.getString("surname")
         val phone   = user_data.getString("phone")
 
         val editor = preferences.edit()
         editor.putBoolean("IS_AUTHENTICATED", true)
-        editor.putInt("ID", 150)
+        editor.putInt("ID", id)
         editor.putString("NAME", name)
         editor.putString("SURNAME", surname)
         editor.putString("PHONE", phone)
         editor.apply()
     }
 
-    fun login(username: String, password: String, context: Context, preferences: SharedPreferences)
+    fun login(username: String, password: String, context: Context, preferences: SharedPreferences) : Int
     {
         println("LOGIN SERVICE: $username $password")
         val rs = RequestService()
@@ -59,11 +61,13 @@ class Login {
                 println("$code : $message")
                 val user_data: JSONObject  = JSONObject(json.getString("user_data"))
                 this.saveUserDataToPrefs(user_data, preferences)
+
             }
             else -> { // Note the block
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             }
         }
 
+        return code.toInt()
     }
 }

@@ -1,6 +1,7 @@
 package com.tcenter.tcenter
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
@@ -23,6 +24,7 @@ class LoginActivitty : AppCompatActivity() {
         val passwordInput: EditText       = findViewById(R.id.passwordInput)
         val loginBtn: Button              = findViewById(R.id.signInBtn)
         val showHidePasswordBtn: TextView = findViewById(R.id.showHidePass)
+        val ticketListIntent = Intent(this, TicketListActivity::class.java)
 
         /**
          * MAKE LOGIN REQUEST ON SIGN IN BUTTON CLICK
@@ -37,7 +39,11 @@ class LoginActivitty : AppCompatActivity() {
             /** LOGIN SERVICE */
             val ls: Login = Login()
             println("LEST MAKE LS>LOGIN")
-            ls.login(phoneNumber, password, applicationContext, getSharedPreferences("userData", Context.MODE_PRIVATE))
+            val responseCode: Int = ls.login(phoneNumber, password, applicationContext, getSharedPreferences("userData", Context.MODE_PRIVATE))
+
+            if (responseCode == 1) {
+                this.redicrectToTicketListActivity()
+            }
         }
 
         /**
@@ -52,5 +58,11 @@ class LoginActivitty : AppCompatActivity() {
                 showHidePasswordBtn.text = "SHOW"
             }
         }
+    }
+
+    private fun redicrectToTicketListActivity()
+    {
+        val intent = Intent(this, TicketListActivity::class.java)
+        startActivity(intent)
     }
 }
