@@ -17,7 +17,7 @@ class Login {
 
 
         //USER DATA
-        val id    = user_data.getInt("id")
+        val id      = user_data.getInt("id")
         val name    = user_data.getString("name")
         val surname = user_data.getString("surname")
         val phone   = user_data.getString("phone")
