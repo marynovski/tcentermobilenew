@@ -86,7 +86,8 @@ class RequestService {
 //}
     fun getTicketsRequestJob(userId: Int, status: Int, offset: Int) = runBlocking()
     {
-        val json = "{\"params\":{\"userId\":\"$userId\",\"status\":\"$status\",\"offset\":\"$offset\",\"limit\":\"4\"}}"
+        val limit = 3
+        val json = "{\"params\":{\"userId\":\"$userId\",\"status\":\"$status\",\"offset\":\"$offset\",\"limit\":\"$limit\"}}"
         var jsonResponse: String = "ERROR"
 
         /** http://www.tcenter.pl/api/v/mobile/get-tickets */
@@ -131,12 +132,12 @@ class RequestService {
         return@runBlocking jsonResponse
     }
 
-    fun getTicketsRequest(userId: Int, status: Int): String
+    fun getTicketsRequest(userId: Int, status: Int, offset: Int): String
     {
         println("START LOGIN REQUEST")
         var jsonResponse: String = "ERROR LOGIN REQUEST"
         runBlocking {
-            val getTicketsRequestJob = async(Dispatchers.IO) { getTicketsRequestJob(userId, status, 1) }
+            val getTicketsRequestJob = async(Dispatchers.IO) { getTicketsRequestJob(userId, status, offset) }
 
             runBlocking(block = {
                 jsonResponse = getTicketsRequestJob.await()

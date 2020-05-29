@@ -44,28 +44,36 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="409dp"
-        android:layout_height="480dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="408dp"
+        android:layout_height="365dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
-        <LinearLayout
-            android:id="@+id/ticketList"
+        <ScrollView
+            android:id="@+id/ticketsScroll"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="198dp">
+
+            <LinearLayout
+                android:id="@+id/ticketList"
+                android:layout_width="409dp"
+                android:layout_height="480dp"
+                android:orientation="vertical" />
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="409dp"
-        android:layout_height="124dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="411dp"
+        android:layout_height="122dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -73,14 +81,16 @@
             android:orientation="horizontal">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/toDoBtn"
+                android:id="@+id/toDoLayout"
                 android:layout_width="102dp"
                 android:layout_height="match_parent">
 
                 <ImageButton
-                    android:id="@+id/imageButton"
+                    android:id="@+id/toDoBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -88,28 +98,30 @@
                     app:srcCompat="@drawable/ic_launcher_foreground" />
 
                 <Button
-                    android:id="@+id/button3"
+                    android:id="@+id/toDoCount"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="3dp"
                     android:layout_marginEnd="3dp"
                     android:layout_marginBottom="68dp"
                     android:text="Button"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageButton"
-                    app:layout_constraintEnd_toEndOf="@+id/imageButton"
-                    app:layout_constraintTop_toTopOf="@+id/imageButton"
+                    app:layout_constraintBottom_toBottomOf="@+id/toDoLayout"
+                    app:layout_constraintEnd_toEndOf="@+id/toDoLayout"
+                    app:layout_constraintTop_toTopOf="@+id/toDoLayout"
                     tools:text="56" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/solvedBtn"
+                android:id="@+id/solvedLayout"
                 android:layout_width="102dp"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <ImageButton
-                    android:id="@+id/imageButton2"
+                    android:id="@+id/solvedBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
                     app:srcCompat="@drawable/ic_launcher_foreground"
                     tools:layout_editor_absoluteY="3dp" />
 
@@ -124,14 +136,16 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/sentByMeBtn"
+                android:id="@+id/sentByMeLayout"
                 android:layout_width="102dp"
                 android:layout_height="match_parent">
 
                 <ImageButton
-                    android:id="@+id/imageButton3"
+                    android:id="@+id/sentByMeBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
                     app:srcCompat="@drawable/ic_launcher_foreground"
                     tools:layout_editor_absoluteY="3dp" />
 
@@ -146,14 +160,16 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/sentDoneBtn"
+                android:id="@+id/sentDoneLayout"
                 android:layout_width="102dp"
                 android:layout_height="match_parent">
 
                 <ImageButton
-                    android:id="@+id/imageButton4"
+                    android:id="@+id/sentDoneBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
                     app:srcCompat="@drawable/ic_launcher_foreground"
                     tools:layout_editor_absoluteY="3dp" />
 
