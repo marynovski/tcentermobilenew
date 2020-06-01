@@ -33,27 +33,27 @@ class TicketListActivity : AppCompatActivity() {
 
         ticketListLayout.removeAllViews()
 
-        ts.getTicketsByUserIdAndTicketStatus(userId, this.TO_DO, ticketListLayout, applicationContext, ticketListScrollView, 3)
+        ts.getTicketsByUserIdAndTicketStatus(userId, this.TO_DO, ticketListLayout, applicationContext, ticketListScrollView, 0)
 
 
         toDoBtn.setOnClickListener()
         {
-            ts.getTicketsByUserIdAndTicketStatus(userId, this.TO_DO, ticketListLayout, applicationContext, ticketListScrollView, 3)
+            ts.getTicketsByUserIdAndTicketStatus(userId, this.TO_DO, ticketListLayout, applicationContext, ticketListScrollView, 0)
         }
 
         solvedBtn.setOnClickListener()
         {
-            ts.getTicketsByUserIdAndTicketStatus(userId, this.SOLVED, ticketListLayout, applicationContext, ticketListScrollView, 3)
+            ts.getTicketsByUserIdAndTicketStatus(userId, this.SOLVED, ticketListLayout, applicationContext, ticketListScrollView, 0)
         }
 
         sentByMeBtn.setOnClickListener()
         {
-            ts.getTicketsByUserIdAndTicketStatus(userId, this.SENT_BY_ME, ticketListLayout, applicationContext, ticketListScrollView, 3)
+            ts.getTicketsByUserIdAndTicketStatus(userId, this.SENT_BY_ME, ticketListLayout, applicationContext, ticketListScrollView, 0)
         }
 
         sentDoneBtn.setOnClickListener()
         {
-            ts.getTicketsByUserIdAndTicketStatus(userId, this.SENT_DONE, ticketListLayout, applicationContext, ticketListScrollView, 3)
+            ts.getTicketsByUserIdAndTicketStatus(userId, this.SENT_DONE, ticketListLayout, applicationContext, ticketListScrollView, 0)
         }
 
 //        val logoutBtn: Button = findViewById(R.id.logoutBtn)

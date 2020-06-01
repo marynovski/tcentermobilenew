@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.Log
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
@@ -19,13 +20,10 @@ import java.lang.Thread.sleep
 class TicketsService {
 
     fun getTicketsByUserIdAndTicketStatus(userId: Int, status: Int, ticketListLayout: LinearLayout, context: Context, scrollView: ScrollView, loadedTicketsCount: Int) {
-
-        println("TICEKTS: "+loadedTicketsCount)
-
         /** PARSE JSON */
         var jsonResponse: JSONObject = JSONObject("{}")
         val rs: RequestService = RequestService()
-        val response = rs.getTicketsRequest(userId, status, loadedTicketsCount-2)
+        val response = rs.getTicketsRequest(userId, status, loadedTicketsCount-2, loadedTicketsCount+10)
         try {
             jsonResponse = JSONObject("{\"json\": $response}")
             println(jsonResponse)
@@ -36,6 +34,7 @@ class TicketsService {
         val json = JSONArray(jsonResponse.getString("json"))
 
         /** REMOVE ALL CHILD VIEWS OF TICKET LIST LAYOUT */
+        ticketListLayout.removeAllViews()
         for(i in 0 until json.length())
         {
             /** GENERATING CLICKABLE TICKETS PREVIEWS */
@@ -81,31 +80,14 @@ class TicketsService {
 
         }
 
-        println("TICEKTS: "+loadedTicketsCount)
+        val loadMoreTicketsBtn: Button = Button(context)
+        loadMoreTicketsBtn.setText("Load more tickets...")
+        ticketListLayout.addView(loadMoreTicketsBtn)
 
-        scrollView.viewTreeObserver
-            .addOnScrollChangedListener {
-                var scrollLimit: Int = 800 * (loadedTicketsCount / 3)
-                val scrollY: Int = scrollView.getScrollY()
-                println("REQUEST LIMIT:$scrollLimit")
-                println("Y: $scrollY")
-                if (scrollY > scrollLimit) {
-                    scrollView.viewTreeObserver.removeOnScrollChangedListener {  }
-                    getTicketsByUserIdAndTicketStatus(userId, status, ticketListLayout, context, scrollView, loadedTicketsCount+3)
-                }
-
-            }
-    }
-
-    fun testScroll(loadedTicketsCount: Int, scrollView: ScrollView)
-    {
-        var scrollLimit: Int = 800 * (loadedTicketsCount / 3)
-        val scrollY: Int = scrollView.getScrollY()
-        println("REQUEST LIMIT:$scrollLimit")
-        println("Y: $scrollY")
-        if (scrollY > scrollLimit) {
-            this.testScroll(loadedTicketsCount + 3, scrollView)
+        loadMoreTicketsBtn.setOnClickListener()
+        {
+            this.getTicketsByUserIdAndTicketStatus(userId, status, ticketListLayout, context, scrollView, loadedTicketsCount+10)
         }
-    }
 
+    }
 }
