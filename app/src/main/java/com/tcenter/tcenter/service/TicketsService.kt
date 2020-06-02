@@ -1,13 +1,21 @@
 package com.tcenter.tcenter.service
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.graphics.Color
 import android.graphics.Typeface
+import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
+import com.tcenter.tcenter.R
+import com.tcenter.tcenter.TicketView
+import kotlinx.android.synthetic.main.activity_ticket_view.view.*
 import kotlinx.coroutines.delay
 import org.json.JSONArray
 import org.json.JSONException
@@ -75,7 +83,13 @@ class TicketsService {
 
             ticketViewLayout.setOnClickListener()
             {
-                println(id)
+                val intent = Intent(context, TicketView::class.java)
+                intent.setFlags(FLAG_ACTIVITY_NEW_TASK)
+                val b: Bundle = Bundle()
+                b.putInt("id", id)
+                b.putInt("userId", userId)
+                intent.putExtras(b)
+                startActivity(context, intent, b)
             }
 
         }
@@ -89,5 +103,50 @@ class TicketsService {
             this.getTicketsByUserIdAndTicketStatus(userId, status, ticketListLayout, context, scrollView, loadedTicketsCount+10)
         }
 
+    }
+
+    fun getTicketByIdAndUserId(id: Int, userId: Int): JSONObject {
+        var jsonResponse: JSONObject = JSONObject("{}")
+        val rs: RequestService = RequestService()
+        val response = rs.getTicketRequest(id, userId)
+        try {
+            jsonResponse = JSONObject("{\"json\": $response}")
+            println(jsonResponse)
+        }  catch (e: JSONException) {
+            Log.e("JSONE", e.toString());
+        }
+
+        return jsonResponse
+    }
+
+    fun makeTicketView(ticketId: Int, userId: Int, activity: Activity)
+    {
+        val jsonResponse: JSONObject = this.getTicketByIdAndUserId(ticketId, userId)
+        val json = JSONArray(jsonResponse.getString("json"))
+        println(json)
+
+        /** TICKET DATA FROM JSON */
+        val jsonToParse: JSONObject = json.getJSONObject(0)
+        val topic: String = jsonToParse.getString("topic")
+        val content: String = jsonToParse.getString("content")
+
+        /** SET TOPIC TEXT */
+        val ticketTopicTextView: TextView = activity.findViewById(R.id.ticketTopicText)
+        ticketTopicTextView.setText(topic)
+
+        /** SET CONTENT TEXT */
+        val ticketContentText: TextView = activity.findViewById(R.id.ticketContentText)
+        ticketContentText.setText(content)
+
+
+        val ds = DateService()
+        /** PARSE AND SET DEADLINE DATETIME */
+        val deadlineDateTime: String = "Deadline: "+ds.parseDateTime(jsonToParse.getJSONObject("deadlineTime"))
+        val deadlineTextView: TextView = activity.findViewById(R.id.deadlineText)
+        deadlineTextView.setText(deadlineDateTime)
+        /** PARSE AND SET ADDED/CREATED DATETIME */
+        val createdDateTime: String = "Added: "+ds.parseDateTime(jsonToParse.getJSONObject("createdTime"))
+        val addedTextView: TextView = activity.findViewById(R.id.addedText)
+        addedTextView.setText(createdDateTime)
     }
 }
