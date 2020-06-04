@@ -1,8 +1,10 @@
 package com.tcenter.tcenter
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.ViewTreeObserver.OnScrollChangedListener
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -56,17 +58,17 @@ class TicketListActivity : AppCompatActivity() {
             ts.getTicketsByUserIdAndTicketStatus(userId, this.SENT_DONE, ticketListLayout, applicationContext, ticketListScrollView, 0)
         }
 
-//        val logoutBtn: Button = findViewById(R.id.logoutBtn)
-//
-//        logoutBtn.setOnClickListener() {
-//            println("CLICK LOGOUT")
-//            val editor = sharedPreferences.edit()
-//            editor.putBoolean("IS_AUTHENTICATED", false)
-//            editor.apply()
-//
-//            val intent = Intent(this, MainActivity::class.java)
-//            startActivity(intent)
-//        }
+        val logoutBtn: Button = findViewById(R.id.createTicketBtn)
+
+        logoutBtn.setOnClickListener() {
+            println("CLICK LOGOUT")
+            val editor = sharedPreferences.edit()
+            editor.putBoolean("IS_AUTHENTICATED", false)
+            editor.apply()
+
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {

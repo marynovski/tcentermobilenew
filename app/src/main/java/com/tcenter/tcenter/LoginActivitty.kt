@@ -34,12 +34,13 @@ class LoginActivitty : AppCompatActivity() {
          */
         loginBtn.setOnClickListener() {
             println("CLICKED")
-            val phoneNumber: String = directNumberInput.selectedItem.toString()+phoneNumberInput.text.toString()
+            val directNumber: String = directNumberInput.selectedItem.toString()
+            val phoneNumber: String = phoneNumberInput.text.toString()
             val password: String    = passwordInput.text.toString()
             /** LOGIN SERVICE */
             val ls: Login = Login()
             println("LEST MAKE LS>LOGIN")
-            val responseCode: Int = ls.login(phoneNumber, password, applicationContext, getSharedPreferences("userData", Context.MODE_PRIVATE))
+            val responseCode: Int = ls.login(directNumber, phoneNumber, password, applicationContext, getSharedPreferences("userData", Context.MODE_PRIVATE))
 
             if (responseCode == 1) {
                 this.redicrectToTicketListActivity()

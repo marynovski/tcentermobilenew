@@ -22,10 +22,12 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="12dp"
+            android:background="#FFFFFF"
             app:layout_constraintBottom_toTopOf="@+id/backHeaderText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_launcher_foreground" />
+            app:srcCompat="@drawable/abc_vector_test"
+            tools:srcCompat="?attr/homeAsUpIndicator" />
 
         <TextView
             android:id="@+id/backHeaderText"
@@ -34,14 +36,14 @@
             android:layout_marginStart="18dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="11dp"
-            android:text="TextView"
+            android:text="Back"
             android:textColor="#000000"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/backBtn"
-            tools:text="Back" />
+            tools:text="@string/back" />
 
         <TextView
             android:id="@+id/deadlineText"
@@ -71,8 +73,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ticketContentContainer"
-        android:layout_width="409dp"
-        android:layout_height="338dp"
+        android:layout_width="408dp"
+        android:layout_height="311dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
@@ -92,8 +94,8 @@
 
         <ScrollView
             android:id="@+id/ticketContentScroll"
-            android:layout_width="377dp"
-            android:layout_height="199dp"
+            android:layout_width="379dp"
+            android:layout_height="124dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toTopOf="@+id/attachmentsScroll"
@@ -110,8 +112,7 @@
                 <TextView
                     android:id="@+id/ticketContentText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text=" LOREM IPSUM DOLOR SIT AMET LOREM IPSUM DOLOR SIT AMET LOREM IPSUM DOLOR SIT AMET LOREM IPSUM DOLOR SIT AMET LOREM IPSUM DOLOR SIT AMET LOREM IPSUM DOLOR SIT AMET LOREM IPSUM DOLOR SIT AMET LOREM IPSUM DOLOR SIT AMET LOREM IPSUM DOLOR SIT AMET LOREM IPSUM DOLOR SIT AMET LOREM IPSUM DOLOR SIT AMET LOREM IPSUM DOLOR SIT AMET LOREM IPSUM DOLOR SIT AMET " />
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
         </ScrollView>
@@ -168,7 +169,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/downOptionsContainer"
         android:layout_width="409dp"
-        android:layout_height="162dp"
+        android:layout_height="192dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -179,21 +180,19 @@
         <TextView
             android:id="@+id/authorText"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="335dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="4dp"
             android:text="TextView"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/projectName"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="21dp"
             android:layout_marginStart="17dp"
-            android:layout_marginEnd="86dp"
+            android:layout_marginEnd="10dp"
             android:text="TextView"
             app:layout_constraintEnd_toStartOf="@+id/showChatBtn"
             app:layout_constraintHorizontal_bias="0.0"
@@ -203,36 +202,40 @@
         <TextView
             android:id="@+id/companyText"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="21dp"
             android:layout_marginStart="17dp"
             android:layout_marginEnd="86dp"
+            android:layout_marginBottom="94dp"
             android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/showChatBtn"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.007"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/projectName" />
+            app:layout_constraintTop_toBottomOf="@+id/projectName"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/showChatBtn"
             android:layout_width="187dp"
             android:layout_height="58dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="56dp"
-            android:text="Button"
+            android:layout_marginStart="111dp"
+            android:layout_marginEnd="111dp"
+            android:text="Show Chat"
+            app:layout_constraintBottom_toTopOf="@+id/closeTicketBtn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/closeTicketBtn"
             android:layout_width="185dp"
             android:layout_height="57dp"
-            android:layout_marginEnd="56dp"
-            android:layout_marginBottom="23dp"
-            android:text="Button"
+            android:layout_marginStart="111dp"
+            android:layout_marginEnd="111dp"
+            android:layout_marginBottom="2dp"
+            android:text="Close Ticket"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/showChatBtn"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

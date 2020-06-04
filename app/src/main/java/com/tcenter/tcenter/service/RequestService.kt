@@ -17,8 +17,8 @@ class RequestService {
 
     fun loginRequestJob(username: String, password: String) = runBlocking()
     {
-        val json = "{\"params\":{\"username\":\"0048731041224\",\"password\":\"4M6DOFG7\"}}"
-        var jsonResponse: String = "ERROR"
+        var json = "{\"params\":{\"username\":\"$username\",\"password\":\"$password\"}}"
+        var jsonResponse: String = "{\"user_data\":[],\"status\":{\"code\":0,\"message\":\"Check your network connection\"}}"
 
         /** http://www.tcenter.pl/api/v/mobile/login */
         val url: URL = URL("http://www.tcenter.pl/api/v/mobile/login")
@@ -65,7 +65,7 @@ class RequestService {
     fun loginRequest(username: String, password: String) : String
     {
         println("START LOGIN REQUEST")
-        var jsonResponse: String = "ERROR LOGIN REQUEST"
+        var jsonResponse: String = "{}"
         runBlocking {
             val getLoginResponseJob = async(Dispatchers.IO) { loginRequestJob(username, password) }
 
@@ -86,8 +86,8 @@ class RequestService {
 //}
     fun getTicketsRequestJob(userId: Int, status: Int, offset: Int, limit: Int) = runBlocking()
     {
-        val json = "{\"params\":{\"userId\":\"$userId\",\"status\":\"$status\",\"offset\":\"1\",\"limit\":\"$limit\"}}"
-        var jsonResponse: String = "ERROR"
+        val json = "{\"params\":{\"userId\":150,\"status\":1,\"offset\":\"1\",\"limit\":\"$limit\"}}"
+        var jsonResponse: String = "{}"
 
         /** http://www.tcenter.pl/api/v/mobile/get-tickets */
         val url: URL = URL("http://www.tcenter.pl/api/v/mobile/get-tickets")
@@ -150,7 +150,7 @@ class RequestService {
     fun getTicketRequestJob(id: Int, userId: Int) = runBlocking()
     {
         val json = "{\"params\":{\"ticketId\":\"$id\",\"userId\":\"$userId\"}}"
-        var jsonResponse: String = "ERROR"
+        var jsonResponse: String = "{}"
 
         /** http://www.tcenter.pl/api/v/mobile/get-ticket */
         val url: URL = URL("http://www.tcenter.pl/api/v/mobile/get-ticket")
@@ -197,7 +197,7 @@ class RequestService {
     fun getTicketRequest(id: Int, userId: Int): String
     {
         println("START LOGIN REQUEST")
-        var jsonResponse: String = "ERROR LOGIN REQUEST"
+        var jsonResponse: String = "{}"
         runBlocking {
             val getTicketRequestJob = async(Dispatchers.IO) { getTicketRequestJob(id, userId) }
 

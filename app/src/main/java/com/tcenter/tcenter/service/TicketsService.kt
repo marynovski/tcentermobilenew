@@ -121,6 +121,12 @@ class TicketsService {
 
     fun makeTicketView(ticketId: Int, userId: Int, activity: Activity)
     {
+
+        val backTextView: TextView = activity.findViewById(R.id.backHeaderText)
+        backTextView.setText("Back")
+
+
+
         val jsonResponse: JSONObject = this.getTicketByIdAndUserId(ticketId, userId)
         val json = JSONArray(jsonResponse.getString("json"))
         println(json)
@@ -129,6 +135,15 @@ class TicketsService {
         val jsonToParse: JSONObject = json.getJSONObject(0)
         val topic: String = jsonToParse.getString("topic")
         val content: String = jsonToParse.getString("content")
+        val author: String = "Author: "+jsonToParse.getString("senderName")
+        val companyIsNull: Boolean = jsonToParse.isNull("company")
+        var company: String = "Company: N/A"
+
+        if (!companyIsNull) {
+            company = "Company: "+jsonToParse.getString("company")
+        }
+
+        val project: String = "Project: "+jsonToParse.getString("project")
 
         /** SET TOPIC TEXT */
         val ticketTopicTextView: TextView = activity.findViewById(R.id.ticketTopicText)
@@ -138,6 +153,17 @@ class TicketsService {
         val ticketContentText: TextView = activity.findViewById(R.id.ticketContentText)
         ticketContentText.setText(content)
 
+        /** SET AUTHOR TEXT */
+        val ticketAuthorText: TextView = activity.findViewById(R.id.authorText)
+        ticketAuthorText.setText(author)
+
+        /** SET COMPANY TEXT */
+        val companyText: TextView = activity.findViewById(R.id.companyText)
+        companyText.setText(company)
+
+        /** SET PROJECT TEXT */
+        val projectText: TextView = activity.findViewById(R.id.projectName)
+        projectText.setText(project)
 
         val ds = DateService()
         /** PARSE AND SET DEADLINE DATETIME */

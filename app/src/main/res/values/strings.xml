@@ -17,4 +17,5 @@
         <item>+48</item>
         <item>+32</item>
     </string-array>
+    <string name="back">Back</string>
 </resources>

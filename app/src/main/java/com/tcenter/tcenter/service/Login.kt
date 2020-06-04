@@ -11,11 +11,28 @@ import org.json.JSONObject
 
 class Login {
 
+    private fun translateDirectNumber(directNumber: String): String
+    {
+        val length: Int = directNumber.length
+        val direct_number_split: List<String>
+        var translatedDirectNumber = "0048"
+
+        if (length == 3) {
+            direct_number_split = directNumber.split("+")
+            translatedDirectNumber = "00"+direct_number_split[1]
+
+        } else if (length == 4) {
+            direct_number_split = directNumber.split("+")
+            translatedDirectNumber = "0"+direct_number_split[1]
+        }
+
+        println(translatedDirectNumber)
+
+        return translatedDirectNumber
+    }
+
     private fun saveUserDataToPrefs(user_data: JSONObject, preferences: SharedPreferences)
     {
-        println(user_data)
-
-
         //USER DATA
         val id      = user_data.getInt("id")
         val name    = user_data.getString("name")
@@ -31,10 +48,16 @@ class Login {
         editor.apply()
     }
 
-    fun login(username: String, password: String, context: Context, preferences: SharedPreferences) : Int
+    fun login(directNumber: String, phone: String, password: String, context: Context, preferences: SharedPreferences) : Int
     {
-        println("LOGIN SERVICE: $username $password")
+
+        val translatedDirectNumber: String = this.translateDirectNumber(directNumber)
+        val username: String = translatedDirectNumber+phone
+
+        println("USERNAME: $username")
+
         val rs = RequestService()
+        println(password.toString())
         var response = rs.loginRequest(username, password)
 
         /** PARSE JSON */
@@ -47,6 +70,7 @@ class Login {
             Log.e("JSONE", e.toString());
         }
 
+
         val json = JSONObject(jsonResponse.getString("json"))
         val status: JSONObject    = JSONObject(json.getString("status"))
         val code: String          = status.getString("code")
@@ -58,7 +82,6 @@ class Login {
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             }
             "1" -> {
-                println("$code : $message")
                 val user_data: JSONObject  = JSONObject(json.getString("user_data"))
                 this.saveUserDataToPrefs(user_data, preferences)
 

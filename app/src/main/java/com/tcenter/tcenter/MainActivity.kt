@@ -12,6 +12,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
         /**
          * 1.    Check if shared preferences file "UserData.xml" exists.
          * --------------------------------------------------------------
@@ -33,8 +37,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             this.redirectToLoginActivity()
         }
-
-
     }
 
     /** REDIRECT TO LOGIN ACTIVITY */
