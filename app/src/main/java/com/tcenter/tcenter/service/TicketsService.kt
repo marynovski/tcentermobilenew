@@ -32,66 +32,78 @@ class TicketsService {
         var jsonResponse: JSONObject = JSONObject("{}")
         val rs: RequestService = RequestService()
         val response = rs.getTicketsRequest(userId, status, loadedTicketsCount-2, loadedTicketsCount+10)
+
+        println(response)
+
+        var isResponseNull: Boolean
+
+        if (response == "{}") {
+            isResponseNull = true
+        } else {
+            isResponseNull = false
+        }
+
         try {
             jsonResponse = JSONObject("{\"json\": $response}")
-            println(jsonResponse)
         }  catch (e: JSONException) {
             Log.e("JSONE", e.toString());
         }
 
-        val json = JSONArray(jsonResponse.getString("json"))
 
         /** REMOVE ALL CHILD VIEWS OF TICKET LIST LAYOUT */
         ticketListLayout.removeAllViews()
-        for(i in 0 until json.length())
-        {
-            /** GENERATING CLICKABLE TICKETS PREVIEWS */
-            val ticket: JSONObject = json.getJSONObject(i)
-            println(ticket)
 
-            val id: Int                  = ticket.getInt("id")
-            val topic: String            = ticket.getString("topic")
-            val content: String          = ticket.getString("content")
-            val deadlineTime: JSONObject = ticket.getJSONObject("deadlineTime")
-            val isUrgent: Boolean        = ticket.getBoolean("urgentStatus")
+        if (!isResponseNull) {
+            val json = JSONArray(jsonResponse.getString("json"))
+            for (i in 0 until json.length()) {
+                /** GENERATING CLICKABLE TICKETS PREVIEWS */
+                val ticket: JSONObject = json.getJSONObject(i)
+                println(ticket)
 
-            val ticketViewLayout = LinearLayout(context)
-            ticketViewLayout.setOrientation(LinearLayout.VERTICAL);
-            ticketViewLayout.setPadding(100, 100, 100, 100)
+                val id: Int = ticket.getInt("id")
+                val topic: String = ticket.getString("topic")
+                val content: String = ticket.getString("content")
+                val deadlineTime: JSONObject = ticket.getJSONObject("deadlineTime")
+                val isUrgent: Boolean = ticket.getBoolean("urgentStatus")
 
-            /** TICKET PREVIEW CONFIG */
+                val ticketViewLayout = LinearLayout(context)
+                ticketViewLayout.setOrientation(LinearLayout.VERTICAL);
+                ticketViewLayout.setPadding(100, 100, 100, 100)
 
-            val topicTextView: TextView = TextView(context)
-            topicTextView.setText(topic)
-            topicTextView.textSize = 30.0F
-            topicTextView.setTextColor(Color.BLACK)
-            topicTextView.setTypeface(null, Typeface.BOLD);
+                /** TICKET PREVIEW CONFIG */
 
-            val contentTextView: TextView = TextView(context)
-            contentTextView.setText(content)
-            contentTextView.textSize = 24.0F
+                val topicTextView: TextView = TextView(context)
+                topicTextView.setText(topic)
+                topicTextView.textSize = 30.0F
+                topicTextView.setTextColor(Color.BLACK)
+                topicTextView.setTypeface(null, Typeface.BOLD);
 
-            val deadlineTextView: TextView = TextView(context)
-            deadlineTextView.setText("URGENT Deadline: 12 JAN 9:30")
-            deadlineTextView.textSize = 24.0F
+                val contentTextView: TextView = TextView(context)
+                contentTextView.setText(content)
+                contentTextView.textSize = 24.0F
 
-            ticketViewLayout.addView(topicTextView)
-            ticketViewLayout.addView(contentTextView)
-            ticketViewLayout.addView(deadlineTextView)
+                val deadlineTextView: TextView = TextView(context)
+                deadlineTextView.setText("URGENT Deadline: 12 JAN 9:30")
+                deadlineTextView.textSize = 24.0F
 
-            ticketListLayout.addView(ticketViewLayout)
+                ticketViewLayout.addView(topicTextView)
+                ticketViewLayout.addView(contentTextView)
+                ticketViewLayout.addView(deadlineTextView)
 
-            ticketViewLayout.setOnClickListener()
-            {
-                val intent = Intent(context, TicketView::class.java)
-                intent.setFlags(FLAG_ACTIVITY_NEW_TASK)
-                val b: Bundle = Bundle()
-                b.putInt("id", id)
-                b.putInt("userId", userId)
-                intent.putExtras(b)
-                startActivity(context, intent, b)
+                ticketListLayout.addView(ticketViewLayout)
+
+                ticketViewLayout.setOnClickListener()
+                {
+                    val intent = Intent(context, TicketView::class.java)
+                    intent.setFlags(FLAG_ACTIVITY_NEW_TASK)
+                    val b: Bundle = Bundle()
+                    b.putInt("id", id)
+                    b.putInt("userId", userId)
+                    intent.putExtras(b)
+                    startActivity(context, intent, b)
+                }
+
             }
-
         }
 
         val loadMoreTicketsBtn: Button = Button(context)

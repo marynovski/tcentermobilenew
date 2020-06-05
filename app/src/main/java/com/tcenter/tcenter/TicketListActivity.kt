@@ -14,10 +14,10 @@ import com.tcenter.tcenter.service.TicketsService
 
 class TicketListActivity : AppCompatActivity() {
 
-    private val TO_DO      = 1
-    private val SOLVED     = 2
-    private val SENT_BY_ME = 3
-    private val SENT_DONE  = 4
+//    val TO_DO: int      = 1
+//    val SOLVED     = 2
+//    val SENT_BY_ME = 3
+//    val SENT_DONE  = 4
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,27 +35,28 @@ class TicketListActivity : AppCompatActivity() {
 
         ticketListLayout.removeAllViews()
 
-        ts.getTicketsByUserIdAndTicketStatus(userId, this.TO_DO, ticketListLayout, applicationContext, ticketListScrollView, 0)
+
+        ts.getTicketsByUserIdAndTicketStatus(userId, 1, ticketListLayout, applicationContext, ticketListScrollView, 0)
 
 
         toDoBtn.setOnClickListener()
         {
-            ts.getTicketsByUserIdAndTicketStatus(userId, this.TO_DO, ticketListLayout, applicationContext, ticketListScrollView, 0)
+            ts.getTicketsByUserIdAndTicketStatus(userId, 1, ticketListLayout, applicationContext, ticketListScrollView, 0)
         }
 
         solvedBtn.setOnClickListener()
         {
-            ts.getTicketsByUserIdAndTicketStatus(userId, this.SOLVED, ticketListLayout, applicationContext, ticketListScrollView, 0)
+            ts.getTicketsByUserIdAndTicketStatus(userId, 2, ticketListLayout, applicationContext, ticketListScrollView, 0)
         }
 
         sentByMeBtn.setOnClickListener()
         {
-            ts.getTicketsByUserIdAndTicketStatus(userId, this.SENT_BY_ME, ticketListLayout, applicationContext, ticketListScrollView, 0)
+            ts.getTicketsByUserIdAndTicketStatus(userId, 3, ticketListLayout, applicationContext, ticketListScrollView, 0)
         }
 
         sentDoneBtn.setOnClickListener()
         {
-            ts.getTicketsByUserIdAndTicketStatus(userId, this.SENT_DONE, ticketListLayout, applicationContext, ticketListScrollView, 0)
+            ts.getTicketsByUserIdAndTicketStatus(userId, 4, ticketListLayout, applicationContext, ticketListScrollView, 0)
         }
 
         val logoutBtn: Button = findViewById(R.id.createTicketBtn)
