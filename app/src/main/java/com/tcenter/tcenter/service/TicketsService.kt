@@ -62,7 +62,12 @@ class TicketsService {
 
                 val id: Int = ticket.getInt("id")
                 val topic: String = ticket.getString("topic")
-                val content: String = ticket.getString("content")
+                var content: String = ticket.getString("content")
+
+                if (content.length > 100) {
+                    content = content.substring(0, 100)+"..."
+                }
+
                 val deadlineTime: JSONObject = ticket.getJSONObject("deadlineTime")
                 val isUrgent: Boolean = ticket.getBoolean("urgentStatus")
 

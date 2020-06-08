@@ -17,11 +17,11 @@ class RequestService {
 
     fun loginRequestJob(username: String, password: String) = runBlocking()
     {
-        var json = "{\"username\":\"$username\",\"password\":\"$password\"}"
+        var json = "{\"params\":{\"username\":\"$username\",\"password\":\"$password\"}}"
         var jsonResponse: String = "{\"user_data\":[],\"status\":{\"code\":0,\"message\":\"Check your network connection\"}}"
 
         /** http://www.tcenter.pl/api/v/mobile/login */
-        val url: URL = URL("http://188.68.224.36:8081/api/v/mobile/login")
+        val url: URL = URL("http://188.68.224.36:8194/api/v/mobile/login")
         try {
             val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
             conn.requestMethod = "POST"
@@ -80,11 +80,12 @@ class RequestService {
 
     fun getTicketsRequestJob(userId: Int, status: Int, offset: Int, limit: Int) = runBlocking()
     {
-        val json = "{\"params\":{\"userId\":\"$userId\",\"status\":\"$status\",\"offset\":\"1\",\"limit\":\"$limit\"}}"
+        val json = "{\"params\":{\"userId\":\"$userId\",\"status\":\"$status\",\"offset\":\"0\",\"limit\":\"$limit\"}}"
+        println("REQUEST: $json")
         var jsonResponse: String = "{}"
 
         /** http://www.tcenter.pl/api/v/mobile/get-tickets */
-        val url: URL = URL("http://www.tcenter.pl/api/v/mobile/get-tickets")
+        val url: URL = URL("http://188.68.224.36:8194/api/v/mobile/get-tickets")
         try {
             val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
             conn.requestMethod = "POST"
@@ -147,7 +148,7 @@ class RequestService {
         var jsonResponse: String = "{}"
 
         /** http://www.tcenter.pl/api/v/mobile/get-ticket */
-        val url: URL = URL("http://www.tcenter.pl/api/v/mobile/get-ticket")
+        val url: URL = URL("http://188.68.224.36:8194/api/v/mobile/get-ticket")
         try {
             val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
             conn.requestMethod = "POST"
