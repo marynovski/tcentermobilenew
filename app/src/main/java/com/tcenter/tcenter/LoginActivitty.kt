@@ -6,25 +6,24 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.view.View
 import android.view.Window
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
 import com.tcenter.tcenter.service.Login
 
 class LoginActivitty : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.login_page)
 
         /** LOGIN LAYOUT ELEMENTS */
         val directNumberInput: Spinner    = findViewById(R.id.directNumberSelect)
         val phoneNumberInput: EditText    = findViewById(R.id.phoneInput)
         val passwordInput: EditText       = findViewById(R.id.passwordInput)
         val loginBtn: Button              = findViewById(R.id.signInBtn)
-        val showHidePasswordBtn: TextView = findViewById(R.id.showHidePass)
+        val showPasswordBtn: ImageButton = findViewById(R.id.showPasswordBtn)
+        val hidePasswordBtn: ImageButton = findViewById(R.id.hidePassBtn)
         val ticketListIntent = Intent(this, TicketListActivity::class.java)
 
         /**
@@ -51,14 +50,16 @@ class LoginActivitty : AppCompatActivity() {
         /**
          * SHOW AND HIDE PASSWORD ON CLICK
          */
-        showHidePasswordBtn.setOnClickListener() {
-            if(showHidePasswordBtn.text.equals("SHOW")) {
-                passwordInput.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                showHidePasswordBtn.text = "HIDE"
-            } else {
-                passwordInput.transformationMethod = PasswordTransformationMethod.getInstance()
-                showHidePasswordBtn.text = "SHOW"
-            }
+        showPasswordBtn.setOnClickListener() {
+            passwordInput.transformationMethod = HideReturnsTransformationMethod.getInstance()
+            showPasswordBtn.visibility = View.GONE;
+            hidePasswordBtn.visibility = View.VISIBLE;
+        }
+
+        hidePasswordBtn.setOnClickListener() {
+            passwordInput.transformationMethod = PasswordTransformationMethod.getInstance()
+            showPasswordBtn.visibility = View.VISIBLE;
+            hidePasswordBtn.visibility = View.GONE;
         }
     }
 

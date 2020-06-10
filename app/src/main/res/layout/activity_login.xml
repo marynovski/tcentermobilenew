@@ -7,10 +7,27 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15"
+        app:layout_constraintGuide_begin="20dp" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/headerView"
         android:layout_width="351dp"
-        android:layout_height="143dp"
+        android:layout_height="109dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
         tools:layout_editor_absoluteX="30dp">
 
         <TextView
@@ -47,8 +64,9 @@
         android:layout_marginBottom="2dp"
         app:layout_constraintBottom_toTopOf="@+id/loginFormLayout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerView">
+        app:layout_constraintTop_toTopOf="@+id/guideline2">
 
         <ImageView
             android:id="@+id/tcenterLogoImage"
@@ -132,7 +150,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/showHidePass"
+            android:id="@+id/showPasswordBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="136dp"
@@ -184,4 +202,5 @@
             app:layout_constraintStart_toEndOf="@+id/forgotPasswordInfo"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

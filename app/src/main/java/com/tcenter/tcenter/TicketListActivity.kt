@@ -21,7 +21,7 @@ class TicketListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_ticket_list)
+        setContentView(R.layout.ticket_list)
 
         val ticketListScrollView: ScrollView = findViewById(R.id.ticketsScroll)
         val ticketListLayout: LinearLayout = findViewById(R.id.ticketList)

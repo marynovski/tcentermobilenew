@@ -5,13 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.ScrollView
-import android.widget.TextView
+import android.view.View
+import android.widget.*
 import androidx.core.content.ContextCompat.startActivity
 import com.tcenter.tcenter.R
 import com.tcenter.tcenter.TicketView
@@ -32,12 +31,11 @@ class TicketsService {
         var jsonResponse: JSONObject = JSONObject("{}")
         val rs: RequestService = RequestService()
         val response = rs.getTicketsRequest(userId, status, loadedTicketsCount-2, loadedTicketsCount+10)
-
         println(response)
 
         var isResponseNull: Boolean
 
-        if (response == "{}") {
+        if (response == "{}" ) {
             isResponseNull = true
         } else {
             isResponseNull = false
@@ -68,28 +66,37 @@ class TicketsService {
                     content = content.substring(0, 100)+"..."
                 }
 
-                val deadlineTime: JSONObject = ticket.getJSONObject("deadlineTime")
                 val isUrgent: Boolean = ticket.getBoolean("urgentStatus")
+                val ds = DateService()
+                var deadlineDateTime: String = ""
+
+                if (isUrgent) {
+                    deadlineDateTime = "URGENT            Deadline: " + ds.parseDateTime(ticket.getJSONObject("deadlineTime"))
+                } else {
+                    deadlineDateTime = "Deadline: " + ds.parseDateTime(ticket.getJSONObject("deadlineTime"))
+                }
 
                 val ticketViewLayout = LinearLayout(context)
                 ticketViewLayout.setOrientation(LinearLayout.VERTICAL);
-                ticketViewLayout.setPadding(100, 100, 100, 100)
+                ticketViewLayout.setPadding(100, 20, 100, 20)
 
                 /** TICKET PREVIEW CONFIG */
 
                 val topicTextView: TextView = TextView(context)
                 topicTextView.setText(topic)
-                topicTextView.textSize = 30.0F
+                topicTextView.textSize = 24.0F
                 topicTextView.setTextColor(Color.BLACK)
                 topicTextView.setTypeface(null, Typeface.BOLD);
 
                 val contentTextView: TextView = TextView(context)
                 contentTextView.setText(content)
-                contentTextView.textSize = 24.0F
+                contentTextView.textSize = 16.0F
 
                 val deadlineTextView: TextView = TextView(context)
-                deadlineTextView.setText("URGENT Deadline: 12 JAN 9:30")
-                deadlineTextView.textSize = 24.0F
+                deadlineTextView.setText(deadlineDateTime)
+                deadlineTextView.textSize = 16.0F
+                deadlineTextView.textAlignment = View.TEXT_ALIGNMENT_TEXT_END
+                deadlineTextView.typeface = Typeface.DEFAULT_BOLD
 
                 ticketViewLayout.addView(topicTextView)
                 ticketViewLayout.addView(contentTextView)
@@ -108,6 +115,10 @@ class TicketsService {
                     startActivity(context, intent, b)
                 }
 
+            }
+
+            if (json.length() < 10) {
+                Toast.makeText(context, "There are no more tickets", Toast.LENGTH_SHORT).show()
             }
         }
 

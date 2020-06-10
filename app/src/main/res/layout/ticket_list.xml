@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightMarginLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftMarginLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/percentLine2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/percentLine8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/percentLine4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/percentLine6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.6" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/percentLine100"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="1.0" />
+
+    <TextView
+        android:id="@+id/ticketsTypeHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/toDo"
+        android:textColor="#000000"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/percentLine2"
+        app:layout_constraintStart_toStartOf="@+id/rightMarginLine"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/createTicketBtn"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:backgroundTint="#D12043"
+        android:text="@string/plusCross"
+        android:textColor="#FFFFFF"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toTopOf="@+id/percentLine2"
+        app:layout_constraintEnd_toStartOf="@+id/leftMarginLine"
+        app:layout_constraintTop_toTopOf="@+id/topLine" />
+
+    <ScrollView
+        android:id="@+id/ticketsScroll"
+        android:layout_width="0dp"
+        android:layout_height="395dp"
+        android:background="#FAF5F5"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/percentLine8"
+        app:layout_constraintEnd_toStartOf="@+id/leftMarginLine"
+        app:layout_constraintStart_toStartOf="@+id/rightMarginLine"
+        app:layout_constraintTop_toTopOf="@+id/percentLine2">
+
+        <LinearLayout
+            android:id="@+id/ticketList"
+            android:layout_width="match_parent"
+            android:layout_height="480dp"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/downButtonsLine1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.275"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/downButtonsLine2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.5"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/downButtonsLine3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.725"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/downButtonsLine4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.95"/>
+
+    <ImageButton
+        android:id="@+id/toDoBtn"
+        android:layout_width="92dp"
+        android:layout_height="75dp"
+        android:backgroundTint="#FFFFFF"
+        app:layout_constraintEnd_toStartOf="@+id/downButtonsLine1"
+        app:layout_constraintStart_toStartOf="@+id/rightMarginLine"
+        app:layout_constraintTop_toTopOf="@+id/percentLine8"
+        app:srcCompat="@drawable/todoicon" />
+
+    <ImageButton
+        android:id="@+id/sentByMeBtn"
+        android:layout_width="82dp"
+        android:layout_height="75dp"
+        android:backgroundTint="#FFFFFF"
+        app:layout_constraintEnd_toStartOf="@+id/downButtonsLine3"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/downButtonsLine2"
+        app:layout_constraintTop_toTopOf="@+id/percentLine8"
+        app:srcCompat="@drawable/sentbyme" />
+
+    <ImageButton
+        android:id="@+id/sentDoneBtn"
+        android:layout_width="92dp"
+        android:layout_height="91dp"
+        app:layout_constraintEnd_toStartOf="@+id/leftMarginLine"
+        app:layout_constraintStart_toStartOf="@+id/downButtonsLine3"
+        app:layout_constraintTop_toTopOf="@+id/percentLine8"
+        app:srcCompat="@drawable/ic_launcher_background" />
+
+    <ImageButton
+        android:id="@+id/solvedBtn"
+        android:layout_width="95dp"
+        android:layout_height="75dp"
+        android:backgroundTint="#FFFFFF"
+        app:layout_constraintEnd_toStartOf="@+id/downButtonsLine2"
+        app:layout_constraintStart_toStartOf="@+id/downButtonsLine1"
+        app:layout_constraintTop_toTopOf="@+id/percentLine8"
+        app:srcCompat="@drawable/solvedicon" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/toDo"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toStartOf="@+id/downButtonsLine1"
+        app:layout_constraintStart_toStartOf="@+id/rightMarginLine"
+        app:layout_constraintTop_toBottomOf="@+id/toDoBtn" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Solved"
+        app:layout_constraintEnd_toStartOf="@+id/downButtonsLine2"
+        app:layout_constraintStart_toStartOf="@+id/downButtonsLine1"
+        app:layout_constraintTop_toBottomOf="@+id/solvedBtn" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sent By Me"
+        app:layout_constraintEnd_toStartOf="@+id/downButtonsLine3"
+        app:layout_constraintStart_toStartOf="@+id/downButtonsLine2"
+        app:layout_constraintTop_toBottomOf="@+id/sentByMeBtn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
