@@ -68,4 +68,20 @@ class LoginActivitty : AppCompatActivity() {
         val intent = Intent(this, TicketListActivity::class.java)
         startActivity(intent)
     }
+
+    override fun onResume() {
+        super.onResume()
+
+        val sharedPreferences = getSharedPreferences("userData", Context.MODE_PRIVATE)
+
+        val isLoggedIn: Boolean = sharedPreferences.getBoolean("IS_AUTHENTICATED", false)
+        if (isLoggedIn) {
+            this.redicrectToTicketListActivity()
+        }
+    }
+
+    private fun redirectToLoginActivity() {
+        val intent = Intent(this, LoginActivitty::class.java)
+        startActivity(intent)
+    }
 }

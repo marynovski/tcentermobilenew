@@ -1,15 +1,21 @@
 package com.tcenter.tcenter.service
 
-import kotlinx.coroutines.*
+import android.app.DownloadManager
+import android.content.Context
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.core.content.ContextCompat.getSystemService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import org.json.JSONException
-import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
-import java.lang.Exception
+import java.io.*
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
+import java.util.jar.Manifest
 
 class RequestService {
 
@@ -50,13 +56,13 @@ class RequestService {
 
 
         } catch (e: MalformedURLException) {
-            e.printStackTrace();
+            e.printStackTrace()
         }
         catch (e: JSONException) {
-            e.printStackTrace();
+            e.printStackTrace()
         }
         catch (e: IOException) {
-            e.printStackTrace();
+            e.printStackTrace()
         }
 
         return@runBlocking jsonResponse
@@ -114,13 +120,13 @@ class RequestService {
 
 
         } catch (e: MalformedURLException) {
-            e.printStackTrace();
+            e.printStackTrace()
         }
         catch (e: JSONException) {
-            e.printStackTrace();
+            e.printStackTrace()
         }
         catch (e: IOException) {
-            e.printStackTrace();
+            e.printStackTrace()
         }
 
         return@runBlocking jsonResponse
@@ -177,13 +183,13 @@ class RequestService {
 
 
         } catch (e: MalformedURLException) {
-            e.printStackTrace();
+            e.printStackTrace()
         }
         catch (e: JSONException) {
-            e.printStackTrace();
+            e.printStackTrace()
         }
         catch (e: IOException) {
-            e.printStackTrace();
+            e.printStackTrace()
         }
 
         return@runBlocking jsonResponse
@@ -204,4 +210,24 @@ class RequestService {
         println("FINISH LOGIN REQUEST")
         return jsonResponse
     }
+
+    fun downloadAttachementRequest(fileName: String, context: Context) {
+        val url = "http://188.68.224.36:8194/api/v/mobile/attachments/$fileName"
+
+        val request = DownloadManager.Request(Uri.parse(url))
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+        request.setTitle("Download")
+        request.setDescription("The file is downloading")
+
+        request.allowScanningByMediaScanner()
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "${System.currentTimeMillis()}")
+
+        val manager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        manager.enqueue(request)
+    }
+
+
+
+
 }

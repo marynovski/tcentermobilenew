@@ -1,16 +1,22 @@
 package com.tcenter.tcenter.service
 
+import android.Manifest
 import android.app.Activity
+import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.core.app.ActivityCompat.requestPermissions
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.ContextCompat.startActivity
 import com.tcenter.tcenter.R
 import com.tcenter.tcenter.TicketView
@@ -25,6 +31,8 @@ import java.lang.Thread.sleep
 //}http://www.tcenter.pl/api/v/mobile/get-tickets
 
 class TicketsService {
+
+    private val STORAGE_PERMISSION_CODE: Int = 1000
 
     fun getTicketsByUserIdAndTicketStatus(userId: Int, status: Int, ticketListLayout: LinearLayout, context: Context, scrollView: ScrollView, loadedTicketsCount: Int) {
         /** PARSE JSON */
@@ -202,5 +210,34 @@ class TicketsService {
         val createdDateTime: String = "Added: "+ds.parseDateTime(jsonToParse.getJSONObject("createdTime"))
         val addedTextView: TextView = activity.findViewById(R.id.addedText)
         addedTextView.setText(createdDateTime)
+
+        /** ATTACHMENTS TO DOWNLOAD */
+        val attachments: JSONArray = jsonToParse.getJSONArray("attachments")
+        for (i in 0 until attachments.length())
+        {
+            val fileName: String = attachments[i] as String
+            val attachmentsScroll: LinearLayout = activity.findViewById(R.id.attachementsList)
+            val attachmentImageButton: ImageButton = ImageButton(activity.applicationContext)
+            attachmentImageButton.setImageResource(R.drawable.ic_launcher_foreground)
+            attachmentsScroll.addView(attachmentImageButton)
+
+            val rs = RequestService()
+            attachmentImageButton.setOnClickListener()
+            {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (checkSelfPermission(activity.applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                        PackageManager.PERMISSION_DENIED) {
+
+                        requestPermissions(activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), STORAGE_PERMISSION_CODE)
+                    } else {
+                        rs.downloadAttachementRequest(fileName, activity.applicationContext)
+                    }
+                } else {
+                    rs.downloadAttachementRequest(fileName, activity.applicationContext)
+                }
+
+                println("DOWNLOAD $fileName")
+            }
+        }
     }
 }
