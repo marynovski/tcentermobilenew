@@ -1,6 +1,9 @@
 package com.tcenter.tcenter.service
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import org.json.JSONObject
+import java.time.LocalDateTime
 
 class DateService {
 
@@ -39,5 +42,12 @@ class DateService {
 
 
         return "$day $month $hour:$minute"
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun checkIfDeadlineIsOver(year: String, month: String, day: String, hour: String, minute: String, second: String)
+    {
+        val currentDateTime = LocalDateTime.now()
+        println("CURRENT DATETIME: $currentDateTime")
     }
 }
