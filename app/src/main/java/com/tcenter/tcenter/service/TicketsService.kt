@@ -15,6 +15,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.ContextCompat.startActivity
@@ -34,6 +35,7 @@ class TicketsService {
 
     private val STORAGE_PERMISSION_CODE: Int = 1000
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getTicketsByUserIdAndTicketStatus(userId: Int, status: Int, ticketListLayout: LinearLayout, context: Context, scrollView: ScrollView, loadedTicketsCount: Int) {
         /** PARSE JSON */
         var jsonResponse: JSONObject = JSONObject("{}")
@@ -105,6 +107,10 @@ class TicketsService {
                 deadlineTextView.textSize = 16.0F
                 deadlineTextView.textAlignment = View.TEXT_ALIGNMENT_TEXT_END
                 deadlineTextView.typeface = Typeface.DEFAULT_BOLD
+
+                if (ds.checkIfDeadlineIsOver(ticket.getJSONObject("deadlineTime")) && status == 1 || status == 3) {
+                    deadlineTextView.setTextColor(Color.parseColor("#D12043"))
+                }
 
                 ticketViewLayout.addView(topicTextView)
                 ticketViewLayout.addView(contentTextView)
