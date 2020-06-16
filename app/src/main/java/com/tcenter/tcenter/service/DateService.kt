@@ -68,8 +68,8 @@ class DateService {
         val date_and_time2: List<String> = dateString.split(" ")
         val date2: String = date_and_time2[0]
         val time2: String = date_and_time2[1]
-        val year_month_day2: List<String> = date.split("-")
-        val hours_minutes_seconds2: List<String> = time.split(":")
+        val year_month_day2: List<String> = date2.split("-")
+        val hours_minutes_seconds2: List<String> = time2.split(":")
         val year2: Int = year_month_day2[0].toInt()
         val monthNumber2: Int = year_month_day[1].toInt()
         val day2: Int = year_month_day[2].toInt()
@@ -78,6 +78,9 @@ class DateService {
         var month2: Int = monthNumber2.toInt()
 
         var isOver = false
+
+        println("$year-$month-$day $hour:$minute:$second")
+        println("$year2-$month2-$day2 $hour2:$minute2")
 
         if (year > year2) {
             isOver = true
@@ -89,6 +92,10 @@ class DateService {
             isOver = true
         } else if (minute > minute2){
             isOver = true
+        } else {
+            isOver = false
         }
+
+        return isOver
     }
 }
