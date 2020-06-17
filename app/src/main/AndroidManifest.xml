@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true"
+        android:hardwareAccelerated="false"
         tools:targetApi="n">
         <activity android:name=".TicketView"/>
         <activity android:name=".TicketListActivity" />

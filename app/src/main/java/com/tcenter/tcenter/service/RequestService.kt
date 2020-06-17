@@ -1,12 +1,7 @@
 package com.tcenter.tcenter.service
 
-import android.app.DownloadManager
 import android.content.Context
-import android.net.Uri
-import android.os.Build
 import android.os.Environment
-import androidx.core.content.ContextCompat.checkSelfPermission
-import androidx.core.content.ContextCompat.getSystemService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -15,7 +10,7 @@ import java.io.*
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.jar.Manifest
+
 
 class RequestService {
 
@@ -211,22 +206,64 @@ class RequestService {
         return jsonResponse
     }
 
-    fun downloadAttachementRequest(fileName: String, context: Context) {
-        val url = "http://188.68.224.36:8194/api/v/mobile/attachments/$fileName"
 
-        val request = DownloadManager.Request(Uri.parse(url))
-        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
-        request.setTitle("Download")
-        request.setDescription("The file is downloading")
+    fun downloadAttachementRequest(fileName: String, context: Context): String {
+        println("START LOGIN REQUEST")
+        var jsonResponse: String = "{}"
+        runBlocking {
+            val getdownloadAttachementJob = async(Dispatchers.IO) { downloadAttachementJob(fileName, context) }
 
-        request.allowScanningByMediaScanner()
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "${System.currentTimeMillis()}")
+            runBlocking(block = {
+                jsonResponse = getdownloadAttachementJob.await()
+            })
+        }
 
-        val manager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        manager.enqueue(request)
+        println("FINISH LOGIN REQUEST")
+        println(jsonResponse)
+        return jsonResponse
     }
 
+    fun downloadAttachementJob(fileName: String, context: Context) = runBlocking {
+        val json = "{}"
+        var jsonResponse: String = "{}"
+
+        /** http://www.tcenter.pl/api/v/mobile/get-ticket */
+        val url: URL = URL("http://188.68.224.36:8194/api/v/mobile/attachments/$fileName")
+        try {
+            val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
+            conn.requestMethod = "POST"
+            conn.setRequestProperty("Content-Type", "application/json; utf-8")
+            conn.setRequestProperty("Charset", "utf-8")
+            conn.setRequestProperty("Accept", "application/json")
+            conn.setRequestProperty("Authorization", "7f137082d82368af5968aac4150b3854644b5957")
+            conn.doOutput = true
+
+            val destination: File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val file = File(destination, "$fileName")
+
+            val fileOutput = FileOutputStream(file)
+            val inputStream: InputStream = conn.getInputStream()
+
+            val buffer = ByteArray(1024)
+            var bufferLength = 0
+
+            while (inputStream.read(buffer).also({ bufferLength = it }) > 0) {
+                fileOutput.write(buffer, 0, bufferLength)
+            }
+            fileOutput.close()
+
+        } catch (e: MalformedURLException) {
+            e.printStackTrace()
+        }
+        catch (e: JSONException) {
+            e.printStackTrace()
+        }
+        catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return@runBlocking jsonResponse
+    }
 
     fun closeTicketRequest(ticketId: Int, userId: Int): String {
         println("START CLOSE TICKET REQUEST")
@@ -290,7 +327,4 @@ class RequestService {
 
         return@runBlocking jsonResponse
     }
-
-
-
 }
