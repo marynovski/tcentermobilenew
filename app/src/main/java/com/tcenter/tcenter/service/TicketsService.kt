@@ -175,6 +175,7 @@ class TicketsService {
 
         /** TICKET DATA FROM JSON */
         val jsonToParse: JSONObject = json.getJSONObject(0)
+        val id: String = jsonToParse.getString("id")
         val topic: String = jsonToParse.getString("topic")
         val content: String = jsonToParse.getString("content")
         val author: String = "Author: "+jsonToParse.getString("senderName")
@@ -245,5 +246,22 @@ class TicketsService {
                 println("DOWNLOAD $fileName")
             }
         }
+
+        val closeTicketButton: Button = activity.findViewById(R.id.closeTicketBtn)
+        closeTicketButton.setOnClickListener() {
+            this.closeTicket(id.toInt(), userId, activity.applicationContext)
+        }
+    }
+
+    fun closeTicket(id: Int, userId: Int, context: Context)
+    {
+        val rs = RequestService()
+        if(rs.closeTicketRequest(id, userId) == "true") {
+            Toast.makeText(context, "Ticket has been closed", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Ticket hasn't been closed", Toast.LENGTH_SHORT).show()
+        }
+
+
     }
 }

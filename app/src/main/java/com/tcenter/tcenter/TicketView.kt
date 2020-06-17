@@ -8,6 +8,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import com.tcenter.tcenter.service.RequestService
@@ -33,7 +34,6 @@ class TicketView : AppCompatActivity() {
         backBtn.setOnClickListener() {
             this.redirectToTicketListActivity()
         }
-
     }
 
     /**
