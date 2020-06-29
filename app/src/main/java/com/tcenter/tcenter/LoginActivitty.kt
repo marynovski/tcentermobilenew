@@ -7,11 +7,17 @@ import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
-import android.view.Window
 import android.widget.*
+import com.tcenter.tcenter.helper.LoginResponseCode
 import com.tcenter.tcenter.service.Login
 
 class LoginActivitty : AppCompatActivity() {
+
+    private fun redirectToTicketListActivity()
+    {
+        val intent = Intent(this, TicketListActivity::class.java)
+        startActivity(intent)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,9 +28,8 @@ class LoginActivitty : AppCompatActivity() {
         val phoneNumberInput: EditText    = findViewById(R.id.phoneInput)
         val passwordInput: EditText       = findViewById(R.id.passwordInput)
         val loginBtn: Button              = findViewById(R.id.signInBtn)
-        val showPasswordBtn: ImageButton = findViewById(R.id.showPasswordBtn)
-        val hidePasswordBtn: ImageButton = findViewById(R.id.hidePassBtn)
-        val ticketListIntent = Intent(this, TicketListActivity::class.java)
+        val showPasswordBtn: ImageButton  = findViewById(R.id.showPasswordBtn)
+        val hidePasswordBtn: ImageButton  = findViewById(R.id.hidePassBtn)
 
         /**
          * MAKE LOGIN REQUEST ON SIGN IN BUTTON CLICK
@@ -33,17 +38,14 @@ class LoginActivitty : AppCompatActivity() {
          * IF NOT -> SHOW NOTIFICATION
          */
         loginBtn.setOnClickListener() {
-            println("CLICKED")
             val directNumber: String = directNumberInput.selectedItem.toString()
-            val phoneNumber: String = phoneNumberInput.text.toString()
-            val password: String    = passwordInput.text.toString()
-            /** LOGIN SERVICE */
-            val ls: Login = Login()
-            println("LEST MAKE LS>LOGIN")
+            val phoneNumber: String  = phoneNumberInput.text.toString()
+            val password: String     = passwordInput.text.toString()
+            val ls = Login()
             val responseCode: Int = ls.login(directNumber, phoneNumber, password, applicationContext, getSharedPreferences("userData", Context.MODE_PRIVATE))
 
-            if (responseCode == 1) {
-                this.redicrectToTicketListActivity()
+            if (responseCode == LoginResponseCode.AUTH_SUCCESS) {
+                this.redirectToTicketListActivity()
             }
         }
 
@@ -63,25 +65,13 @@ class LoginActivitty : AppCompatActivity() {
         }
     }
 
-    private fun redicrectToTicketListActivity()
-    {
-        val intent = Intent(this, TicketListActivity::class.java)
-        startActivity(intent)
-    }
-
     override fun onResume() {
         super.onResume()
 
         val sharedPreferences = getSharedPreferences("userData", Context.MODE_PRIVATE)
-
         val isLoggedIn: Boolean = sharedPreferences.getBoolean("IS_AUTHENTICATED", false)
         if (isLoggedIn) {
-            this.redicrectToTicketListActivity()
+            this.redirectToTicketListActivity()
         }
-    }
-
-    private fun redirectToLoginActivity() {
-        val intent = Intent(this, LoginActivitty::class.java)
-        startActivity(intent)
     }
 }
