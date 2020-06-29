@@ -238,6 +238,8 @@ class RequestService {
             conn.setRequestProperty("Authorization", "7f137082d82368af5968aac4150b3854644b5957")
             conn.doOutput = true
 
+            val contentLength = conn.contentLength
+
             val destination: File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             val file = File(destination, "$fileName")
 
@@ -249,6 +251,7 @@ class RequestService {
 
             while (inputStream.read(buffer).also({ bufferLength = it }) > 0) {
                 fileOutput.write(buffer, 0, bufferLength)
+                
             }
             fileOutput.close()
 
@@ -282,11 +285,74 @@ class RequestService {
 
     fun closeTicketJob(ticketId: Int, userId: Int) = runBlocking()
     {
-        val json = "{\"params\":{\"ticketId\":\"$ticketId\",\"userId\":\"$userId\",\"message\":\"Ticket closed via Tcenter Mobile\"}}"
+        val json = "{\"ticketId\":\"$ticketId\",\"userId\":\"$userId\",\"message\":\"Ticket closed via Tcenter Mobile\"}"
         var jsonResponse: String = "{}"
 
         /** http://www.tcenter.pl/api/v/mobile/get-ticket */
         val url: URL = URL("http://188.68.224.36:8194/api/v/mobile/close-ticket")
+        try {
+            val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
+            conn.requestMethod = "POST"
+            conn.setRequestProperty("Content-Type", "application/json; utf-8")
+            conn.setRequestProperty("Charset", "utf-8")
+            conn.setRequestProperty("Accept", "application/json")
+            conn.setRequestProperty("Authorization", "7f137082d82368af5968aac4150b3854644b5957")
+            conn.doOutput = true
+            conn.doInput = true
+
+            conn.outputStream.use { os ->
+                val input = json.toByteArray(charset("utf-8"))
+                os.write(input, 0, input.size)
+            }
+
+            BufferedReader(
+                InputStreamReader(conn.inputStream, "utf-8")
+            ).use { br ->
+                val response = StringBuilder()
+                var responseLine: String? = null
+                while (br.readLine().also { responseLine = it } != null) {
+                    response.append(responseLine!!.trim { it <= ' ' })
+                }
+                jsonResponse = response.toString()
+                conn.disconnect()
+            }
+
+
+        } catch (e: MalformedURLException) {
+            e.printStackTrace()
+        }
+        catch (e: JSONException) {
+            e.printStackTrace()
+        }
+        catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return@runBlocking jsonResponse
+    }
+
+    fun reopenTicketRequest(ticketId: Int, userId: Int): String {
+        println("START Reopen TICKET REQUEST")
+        var jsonResponse: String = "{}"
+        runBlocking {
+            val getReopenTicketJob = async(Dispatchers.IO) { reopenTicketJob(ticketId, userId) }
+
+            runBlocking(block = {
+                jsonResponse = getReopenTicketJob.await()
+            })
+        }
+
+        println("FINISH Reopen TICKET REQUEST")
+        return jsonResponse
+    }
+
+    fun reopenTicketJob(ticketId: Int, userId: Int) = runBlocking()
+    {
+        val json = "{\"params\":{\"ticketId\":\"$ticketId\",\"userId\":\"$userId\",\"message\":\"Ticket reopened via Tcenter Mobile\"}}"
+        var jsonResponse: String = "{}"
+
+        /** http://www.tcenter.pl/api/v/mobile/get-ticket */
+        val url: URL = URL("http://188.68.224.36:8194/api/v/mobile/reopent-ticket")
         try {
             val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
             conn.requestMethod = "POST"

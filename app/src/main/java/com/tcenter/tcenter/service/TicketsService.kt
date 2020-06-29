@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.ContextCompat.startActivity
 import com.tcenter.tcenter.R
 import com.tcenter.tcenter.TicketView
+import com.tcenter.tcenter.helper.TicketStatus
 import kotlinx.android.synthetic.main.activity_ticket_view.view.*
 import kotlinx.coroutines.delay
 import org.json.JSONArray
@@ -34,6 +35,10 @@ import java.lang.Thread.sleep
 class TicketsService {
 
     private val STORAGE_PERMISSION_CODE: Int = 1000
+    private val TO_DO: Int      = 1
+    private val SOLVED: Int     = 2
+    private val SENT_BY_ME: Int = 3
+    private val SENT_DONE: Int  = 4
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTicketsByUserIdAndTicketStatus(userId: Int, status: Int, ticketListLayout: LinearLayout, context: Context, scrollView: ScrollView, loadedTicketsCount: Int) {
@@ -125,6 +130,7 @@ class TicketsService {
                     val b: Bundle = Bundle()
                     b.putInt("id", id)
                     b.putInt("userId", userId)
+                    b.putInt("ticketStatus", status)
                     intent.putExtras(b)
                     startActivity(context, intent, b)
                 }
@@ -161,7 +167,7 @@ class TicketsService {
         return jsonResponse
     }
 
-    fun makeTicketView(ticketId: Int, userId: Int, activity: Activity)
+    fun makeTicketView(ticketId: Int, userId: Int, activity: Activity, ticketStatus: Int)
     {
 
         val backTextView: TextView = activity.findViewById(R.id.backHeaderText)
@@ -181,6 +187,7 @@ class TicketsService {
         val author: String = "Author: "+jsonToParse.getString("senderName")
         val companyIsNull: Boolean = jsonToParse.isNull("company")
         var company: String = "Company: N/A"
+        val status: Int = jsonToParse.getInt("status")
 
         if (!companyIsNull) {
             company = "Company: "+jsonToParse.getString("company")
@@ -247,21 +254,42 @@ class TicketsService {
             }
         }
 
-        val closeTicketButton: Button = activity.findViewById(R.id.closeTicketBtn)
-        closeTicketButton.setOnClickListener() {
-            this.closeTicket(id.toInt(), userId, activity.applicationContext)
+        if (ticketStatus == 1 || ticketStatus == 3 ) {
+
+            val closeTicketButton: Button = activity.findViewById(R.id.closeTicketBtn)
+            closeTicketButton.setOnClickListener() {
+                this.closeTicket(id.toInt(), userId, activity)
+            }
+        } else {
+            val reopenTicketButton: Button = activity.findViewById(R.id.reopenTicketButton)
+            reopenTicketButton.setOnClickListener() {
+                this.reopenTicket(id.toInt(), userId, activity.applicationContext)
+            }
         }
     }
 
-    fun closeTicket(id: Int, userId: Int, context: Context)
+    fun closeTicket(id: Int, userId: Int, activity: Activity)
     {
         val rs = RequestService()
         if(rs.closeTicketRequest(id, userId) == "true") {
-            Toast.makeText(context, "Ticket has been closed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity.applicationContext , "Ticket has been closed", Toast.LENGTH_SHORT).show()
+
+            val closeTicketBtn: Button = activity.findViewById(R.id.closeTicketBtn)
+            val reopenTicketBtn: Button = activity.findViewById(R.id.reopenTicketButton)
+
+            closeTicketBtn.visibility = View.GONE
+            reopenTicketBtn.visibility = View.VISIBLE
         } else {
-            Toast.makeText(context, "Ticket hasn't been closed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity.applicationContext, "Ticket hasn't been closed", Toast.LENGTH_SHORT).show()
         }
 
 
+    }
+
+    fun reopenTicket(id: Int, userId: Int, context: Context)
+    {
+        val rs = RequestService()
+        val reopen_ticket_json_response = rs.reopenTicketRequest(id, userId)
+        print(reopen_ticket_json_response)
     }
 }
