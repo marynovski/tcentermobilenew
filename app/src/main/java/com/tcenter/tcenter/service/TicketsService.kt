@@ -40,7 +40,6 @@ class TicketsService {
     private val SENT_BY_ME: Int = 3
     private val SENT_DONE: Int  = 4
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getTicketsByUserIdAndTicketStatus(userId: Int, status: Int, ticketListLayout: LinearLayout, context: Context, scrollView: ScrollView, loadedTicketsCount: Int) {
         /** PARSE JSON */
         var jsonResponse: JSONObject = JSONObject("{}")
