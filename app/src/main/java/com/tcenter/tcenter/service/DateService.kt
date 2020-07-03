@@ -79,7 +79,6 @@ class DateService {
     {
         val calendar: Calendar = Calendar.getInstance()
         val actualDateTime: String = calendar.time.toString()
-        println(actualDateTime)
 
         val splited_datetime = actualDateTime.split(" ")
         val month: String = splited_datetime[1]
@@ -116,12 +115,11 @@ class DateService {
             isOver = true
         } else if(year2 == year && month2 == monthNumber && day2 < day) {
             isOver = true
-        } else if(year2 == year && month2 == monthNumber && day2 == day && minute2 < minute) {
+        } else if(year2 == year && month2 == monthNumber && day2 == day && hour2 < hour) {
+            isOver = true
+        } else if(year2 == year && month2 == monthNumber && day2 == day && hour2 == hour &&  minute2 < minute) {
             isOver = true
         }
-
-        println("$year-$monthNumber-$day $hour:$minute")
-        println("$year2-$month2-$day2 $hour2:$minute2")
 
         return isOver
     }
