@@ -7,5 +7,6 @@ class CreateTicketActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.create_ticket_view)
+
     }
 }
