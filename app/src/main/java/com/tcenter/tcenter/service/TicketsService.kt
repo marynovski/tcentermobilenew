@@ -302,4 +302,21 @@ class TicketsService {
             Toast.makeText(activity.applicationContext, responseMessage, Toast.LENGTH_SHORT).show()
         }
     }
+
+    fun createTicket()
+    {
+        val projectName = "Android"
+        val topic       = "Android Create Ticket Test"
+        val addedUserId = 150
+        val receivedUserId = 150
+        val deadLine = "2020-07-08 11:40:59"
+        val urgentStatus = true
+        val content = "Test ticket created via android tceneter app"
+
+        val rs = RequestService()
+        val createTicketJsonResponse: JSONObject = JSONObject(rs.createTicketRequest(projectName, topic, addedUserId, receivedUserId, deadLine, urgentStatus, content))
+
+        println(createTicketJsonResponse)
+
+    }
 }

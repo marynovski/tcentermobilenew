@@ -10,11 +10,12 @@ import java.io.*
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
+import java.util.*
 
 
 class RequestService {
 
-    val TCENTER_API_URL = "https://www.tcenter.pl/api/v/mobile/"
+    private val TCENTER_API_URL = "https://www.tcenter.pl/api/v/mobile/"
 
     fun loginRequestJob(username: String, password: String) = runBlocking()
     {
@@ -390,6 +391,72 @@ class RequestService {
         catch (e: IOException) {
             e.printStackTrace()
         }
+
+        return@runBlocking jsonResponse
+    }
+
+    fun createTicketRequest(
+        projectName: String,
+        topic: String,
+        addedUserId: Int,
+        receivedUserId: Int,
+        deadLine: String,
+        urgentStatus: Boolean,
+        content: String
+    ): String {
+        println("START Reopen TICKET REQUEST")
+        var jsonResponse: String = "{}"
+        runBlocking {
+            val getCreateTicketJob = async(Dispatchers.IO) { createTicketJob(projectName, topic, addedUserId, receivedUserId, deadLine, urgentStatus, content) }
+
+            runBlocking(block = {
+                jsonResponse = getCreateTicketJob.await()
+            })
+        }
+
+        println("FINISH Reopen TICKET REQUEST")
+        return jsonResponse
+    }
+
+    fun createTicketJob(
+        projectName: String,
+        topic: String,
+        addedUserId: Int,
+        receivedUserId: Int,
+        deadLine: String,
+        urgentStatus: Boolean,
+        content: String
+    ) = runBlocking()
+    {
+        val params: String = "projectName=$projectName&topic=$topic&addedUserId=$addedUserId&receivedUserId=$receivedUserId&deadLine=$deadLine&urgentStatus=$urgentStatus&content=$content"
+        var jsonResponse = "{}"
+        val urlString: String = "http://188.68.224.36:8194/api/v/create-new-ticket"
+        try {
+            val url: URL = URL(urlString)
+            val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
+            conn.requestMethod = "POST"
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+            conn.setRequestProperty("charset", "utf-8");
+            conn.setRequestProperty("Authorization", "7f137082d82368af5968aac4150b3854644b5957")
+
+            val dos = DataOutputStream(conn.getOutputStream());
+            dos.writeBytes(params);
+            dos.flush();
+
+            val inputStream = conn.getInputStream();
+            val s: Scanner = Scanner(inputStream).useDelimiter("\\A");
+
+            if (s.hasNext()) {
+                jsonResponse = s.next()
+            } else {
+                jsonResponse = "{}"
+            }
+
+        } catch (e: IOException){
+            e.printStackTrace()
+        }
+
+
 
         return@runBlocking jsonResponse
     }

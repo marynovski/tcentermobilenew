@@ -18,7 +18,8 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:targetApi="n">
-        <activity android:name=".CreateTicketActivity"></activity>
+        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".CreateTicketActivity" />
         <activity android:name=".TicketView" />
         <activity android:name=".TicketListActivity" />
         <activity android:name=".MainActivity">
