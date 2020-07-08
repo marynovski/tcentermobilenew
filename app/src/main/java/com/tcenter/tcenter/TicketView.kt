@@ -25,8 +25,6 @@ class TicketView : AppCompatActivity() {
         val reopenTicketBtn: Button = findViewById(R.id.reopenTicketButton)
         val closeTicketBtn: Button  = findViewById(R.id.closeTicketBtn)
 
-
-
         /** get ticket id and user id parameters to load data for it */
         val b: Bundle = intent.extras!!
 

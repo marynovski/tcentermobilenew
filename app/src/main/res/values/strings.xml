@@ -13,6 +13,9 @@
     <string name="hidePass">HIDE</string>
     <string name="plusCross">+</string>
     <string name="toDo">To do</string>
+    <string name="solved">Solved</string>
+    <string name="sentByMe">Sent by me</string>
+    <string name="sentDone">Sent done</string>
     <string-array name="spinnerItems">
         <item>+48</item>
         <item>+32</item>
