@@ -62,11 +62,12 @@ class TicketListActivity : AppCompatActivity() {
         val logoutBtn: Button = findViewById(R.id.createTicketBtn)
 
         logoutBtn.setOnClickListener() {
-            val editor = sharedPreferences.edit()
-            editor.putBoolean("IS_AUTHENTICATED", false)
-            editor.apply()
 
-            val intent = Intent(this, MainActivity::class.java)
+            println("CLICK LOGOUT")
+//            val editor = sharedPreferences.edit()
+//            editor.putBoolean("IS_AUTHENTICATED", false)
+//            editor.apply()
+            val intent = Intent(this, CreateTicketActivity::class.java)
             startActivity(intent)
         }
     }

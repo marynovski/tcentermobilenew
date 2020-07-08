@@ -1,11 +1,16 @@
 package com.tcenter.tcenter.service
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
+import android.view.View
 import android.webkit.JsPromptResult
 import android.widget.Toast
+import kotlinx.android.synthetic.main.login_page.view.*
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -25,8 +30,6 @@ class Login {
             direct_number_split = directNumber.split("+")
             translatedDirectNumber = "0"+direct_number_split[1]
         }
-
-        println(translatedDirectNumber)
 
         return translatedDirectNumber
     }
@@ -54,10 +57,7 @@ class Login {
         val translatedDirectNumber: String = this.translateDirectNumber(directNumber)
         val username: String = translatedDirectNumber+phone
 
-        println("USERNAME: $username")
-
         val rs = RequestService()
-        println(password.toString())
         var response = rs.loginRequest(username, password)
 
         /** PARSE JSON */
@@ -65,7 +65,6 @@ class Login {
 
         try {
             jsonResponse = JSONObject("{\"json\": $response}")
-            println(jsonResponse)
         }  catch (e: JSONException) {
             Log.e("JSONE", e.toString());
         }

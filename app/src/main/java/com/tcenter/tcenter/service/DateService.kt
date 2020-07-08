@@ -1,11 +1,55 @@
 package com.tcenter.tcenter.service
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import org.json.JSONObject
 import java.time.LocalDateTime
+import java.util.*
 
 class DateService {
+
+    private fun convertMonthNumberToString(monthNumber: String) : String
+    {
+        var month: String = "JAN"
+
+        when(monthNumber) {
+            "01" -> month = "JAN"
+            "02" -> month = "FEB"
+            "03" -> month = "MAR"
+            "04" -> month = "APR"
+            "05" -> month = "MAY"
+            "06" -> month = "JUN"
+            "07" -> month = "JUL"
+            "08" -> month = "AUG"
+            "09" -> month = "SEP"
+            "10" -> month = "OCT"
+            "11" -> month = "NOV"
+            "12" -> month = "DEC"
+        }
+
+        return month
+    }
+
+    private fun converStringMonthToNumber(monthString: String) : Int
+    {
+        var month: Int = 1
+
+        when(monthString) {
+            "Jan" -> month = 1
+            "Feb" -> month = 2
+            "Mar" -> month = 3
+            "Apr" -> month = 4
+            "May" -> month = 5
+            "Jun" -> month = 6
+            "Jul" -> month = 7
+            "Aug" -> month = 8
+            "Sep" -> month = 9
+            "Oct" -> month = 10
+            "Nov" -> month = 11
+            "Dec" -> month = 12
+        }
+
+        return month
+    }
+
 
     fun parseDateTime(dateTime: JSONObject): String
     {
@@ -25,44 +69,25 @@ class DateService {
         println(hour)
         println(minute)
 
-        when(monthNumber) {
-            "01" -> month = "JAN"
-            "02" -> month = "FEB"
-            "03" -> month = "MAR"
-            "04" -> month = "APR"
-            "05" -> month = "MAY"
-            "06" -> month = "JUN"
-            "07" -> month = "JUL"
-            "08" -> month = "AUG"
-            "09" -> month = "SEP"
-            "10" -> month = "OCT"
-            "11" -> month = "NOV"
-            "12" -> month = "DEC"
-        }
+        month = this.convertMonthNumberToString(monthNumber)
 
 
         return "$day $month $hour:$minute"
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun checkIfDeadlineIsOver(dateTime: JSONObject) : Boolean
     {
-//        2020-06-16T12:59:42.344
-        val currentDateTime = LocalDateTime.now().toString()
-        val date_and_time: List<String> = currentDateTime.split("T")
-        val date: String = date_and_time[0]
-        val time: String = date_and_time[1]
+        val calendar: Calendar = Calendar.getInstance()
+        val actualDateTime: String = calendar.time.toString()
 
-        val year_month_day: List<String> = date.split("-")
-        val hour_minute_second: List<String> = time.split(":", ".")
-
-        val year: Int = year_month_day[0].toInt()
-        val month: Int = year_month_day[1].toInt()
-        val day: Int = year_month_day[2].toInt()
-
+        val splited_datetime = actualDateTime.split(" ")
+        val month: String = splited_datetime[1]
+        val day: Int = splited_datetime[2].toInt()
+        val time: String = splited_datetime[3]
+        val hour_minute_second: List<String> = time.split(":")
         val hour: Int = hour_minute_second[0].toInt()
         val minute: Int = hour_minute_second[1].toInt()
-        val second: Int = hour_minute_second[2].toInt()
+        val year: Int = splited_datetime[5].toInt()
 
         val dateString: String = dateTime.getString("date")
         val date_and_time2: List<String> = dateString.split(" ")
@@ -71,29 +96,29 @@ class DateService {
         val year_month_day2: List<String> = date2.split("-")
         val hours_minutes_seconds2: List<String> = time2.split(":")
         val year2: Int = year_month_day2[0].toInt()
-        val monthNumber2: Int = year_month_day[1].toInt()
-        val day2: Int = year_month_day[2].toInt()
+        val monthNumber2: String = year_month_day2[1]
+        val day2: Int = year_month_day2[2].toInt()
         val hour2: Int = hours_minutes_seconds2[0].toInt()
         val minute2: Int = hours_minutes_seconds2[1].toInt()
         var month2: Int = monthNumber2.toInt()
 
+        val monthNumber: Int = this.converStringMonthToNumber(month)
+
+
         var isOver = false
 
-        println("$year-$month-$day $hour:$minute:$second")
-        println("$year2-$month2-$day2 $hour2:$minute2")
-
-        if (year > year2) {
+        if (year2 < year) {
             isOver = true
-        } else if (month > month2) {
+        } else if(year2 == year && month2 < monthNumber ) {
             isOver = true
-        } else if (day > day2) {
+        } else if(year2 == year && month2 == monthNumber && day2 < day){
             isOver = true
-        } else if (hour > hour2) {
+        } else if(year2 == year && month2 == monthNumber && day2 < day) {
             isOver = true
-        } else if (minute > minute2){
+        } else if(year2 == year && month2 == monthNumber && day2 == day && hour2 < hour) {
             isOver = true
-        } else {
-            isOver = false
+        } else if(year2 == year && month2 == monthNumber && day2 == day && hour2 == hour &&  minute2 < minute) {
+            isOver = true
         }
 
         return isOver

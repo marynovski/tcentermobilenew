@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.*
 import com.tcenter.tcenter.helper.LoginResponseCode
 import com.tcenter.tcenter.service.Login
+import kotlinx.android.synthetic.main.login_page.view.*
 
 class LoginActivitty : AppCompatActivity() {
 
@@ -31,6 +32,8 @@ class LoginActivitty : AppCompatActivity() {
         val showPasswordBtn: ImageButton  = findViewById(R.id.showPasswordBtn)
         val hidePasswordBtn: ImageButton  = findViewById(R.id.hidePassBtn)
 
+        val ls = Login()
+
         /**
          * MAKE LOGIN REQUEST ON SIGN IN BUTTON CLICK
          * CHECK CREDENTIALS
@@ -41,7 +44,6 @@ class LoginActivitty : AppCompatActivity() {
             val directNumber: String = directNumberInput.selectedItem.toString()
             val phoneNumber: String  = phoneNumberInput.text.toString()
             val password: String     = passwordInput.text.toString()
-            val ls = Login()
             val responseCode: Int = ls.login(directNumber, phoneNumber, password, applicationContext, getSharedPreferences("userData", Context.MODE_PRIVATE))
 
             if (responseCode == LoginResponseCode.AUTH_SUCCESS) {
@@ -49,9 +51,7 @@ class LoginActivitty : AppCompatActivity() {
             }
         }
 
-        /**
-         * SHOW AND HIDE PASSWORD ON CLICK
-         */
+        /** Show or hide password on click listeners */
         showPasswordBtn.setOnClickListener() {
             passwordInput.transformationMethod = HideReturnsTransformationMethod.getInstance()
             showPasswordBtn.visibility = View.GONE;
@@ -63,6 +63,7 @@ class LoginActivitty : AppCompatActivity() {
             showPasswordBtn.visibility = View.VISIBLE;
             hidePasswordBtn.visibility = View.GONE;
         }
+
     }
 
     override fun onResume() {

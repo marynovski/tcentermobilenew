@@ -285,7 +285,7 @@ class RequestService {
 
     fun closeTicketJob(ticketId: Int, userId: Int) = runBlocking()
     {
-        val json = "{\"ticketId\":\"$ticketId\",\"userId\":\"$userId\",\"message\":\"Ticket closed via Tcenter Mobile\"}"
+        val json = "{\"params\":{\"ticketId\":\"$ticketId\",\"userId\":\"$userId\",\"message\":\"Ticket closed via Tcenter Mobile\"}}"
         var jsonResponse: String = "{}"
 
         /** http://www.tcenter.pl/api/v/mobile/get-ticket */
@@ -348,7 +348,7 @@ class RequestService {
 
     fun reopenTicketJob(ticketId: Int, userId: Int) = runBlocking()
     {
-        val json = "{\"params\":{\"ticketId\":\"$ticketId\",\"userId\":\"$userId\",\"message\":\"Ticket reopened via Tcenter Mobile\"}}"
+        val json = "{\"ticketId\":\"$ticketId\",\"userId\":\"$userId\",\"message\":\"Ticket reopened via Tcenter Mobile\"}"
         var jsonResponse: String = "{}"
 
         /** http://www.tcenter.pl/api/v/mobile/get-ticket */

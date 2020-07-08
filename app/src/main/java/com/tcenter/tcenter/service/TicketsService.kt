@@ -40,7 +40,6 @@ class TicketsService {
     private val SENT_BY_ME: Int = 3
     private val SENT_DONE: Int  = 4
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getTicketsByUserIdAndTicketStatus(userId: Int, status: Int, ticketListLayout: LinearLayout, context: Context, scrollView: ScrollView, loadedTicketsCount: Int) {
         /** PARSE JSON */
         var jsonResponse: JSONObject = JSONObject("{}")
@@ -254,21 +253,18 @@ class TicketsService {
             }
         }
 
-        if (ticketStatus == 1 || ticketStatus == 3 ) {
-
             val closeTicketButton: Button = activity.findViewById(R.id.closeTicketBtn)
             closeTicketButton.setOnClickListener() {
                 this.closeTicket(id.toInt(), userId, activity)
             }
-        } else {
+
             val reopenTicketButton: Button = activity.findViewById(R.id.reopenTicketButton)
             reopenTicketButton.setOnClickListener() {
-                this.reopenTicket(id.toInt(), userId, activity.applicationContext)
+                this.reopenTicket(id.toInt(), userId, activity)
             }
-        }
     }
 
-    fun closeTicket(id: Int, userId: Int, activity: Activity)
+    private fun closeTicket(id: Int, userId: Int, activity: Activity)
     {
         val rs = RequestService()
         if(rs.closeTicketRequest(id, userId) == "true") {
@@ -277,7 +273,7 @@ class TicketsService {
             val closeTicketBtn: Button = activity.findViewById(R.id.closeTicketBtn)
             val reopenTicketBtn: Button = activity.findViewById(R.id.reopenTicketButton)
 
-            closeTicketBtn.visibility = View.GONE
+            closeTicketBtn.visibility = View.INVISIBLE
             reopenTicketBtn.visibility = View.VISIBLE
         } else {
             Toast.makeText(activity.applicationContext, "Ticket hasn't been closed", Toast.LENGTH_SHORT).show()
@@ -286,10 +282,24 @@ class TicketsService {
 
     }
 
-    fun reopenTicket(id: Int, userId: Int, context: Context)
+    private fun reopenTicket(id: Int, userId: Int, activity: Activity)
     {
         val rs = RequestService()
-        val reopen_ticket_json_response = rs.reopenTicketRequest(id, userId)
-        print(reopen_ticket_json_response)
+        val reopen_ticket_json_response: JSONObject = JSONObject(rs.reopenTicketRequest(id, userId))
+
+        val responseMessage: String = reopen_ticket_json_response.getString("msg")
+        val result: Boolean = reopen_ticket_json_response.getBoolean("result")
+
+        if (result) {
+            Toast.makeText(activity.applicationContext , responseMessage, Toast.LENGTH_SHORT).show()
+
+            val closeTicketBtn: Button  = activity.findViewById(R.id.closeTicketBtn)
+            val reopenTicketBtn: Button = activity.findViewById(R.id.reopenTicketButton)
+
+            closeTicketBtn.visibility = View.VISIBLE
+            reopenTicketBtn.visibility = View.INVISIBLE
+        } else {
+            Toast.makeText(activity.applicationContext, responseMessage, Toast.LENGTH_SHORT).show()
+        }
     }
 }
