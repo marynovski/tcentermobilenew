@@ -21,4 +21,12 @@
         <item>+32</item>
     </string-array>
     <string name="back">Back</string>
+    <string name="newTicket">New ticket</string>
+    <string name="topic">Topic</string>
+    <string name="projectName">Project name</string>
+    <string name="receiverUser">Receiver user</string>
+    <string name="urgent">Urgent</string>
+    <string name="setDeadline">Set deadline</string>
+    <string name="content">Content...</string>
+    <string name="submit">Submit</string>
 </resources>

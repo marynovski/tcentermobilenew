@@ -3,6 +3,7 @@ package com.tcenter.tcenter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ScrollView
 import com.tcenter.tcenter.service.TicketsService
 
 class CreateTicketActivity : AppCompatActivity() {
@@ -15,5 +16,7 @@ class CreateTicketActivity : AppCompatActivity() {
         submitBtn.setOnClickListener {
             ts.createTicket()
         }
+
+        val contentScroll: ScrollView = findViewById(R.id.contentScroll)
     }
 }
