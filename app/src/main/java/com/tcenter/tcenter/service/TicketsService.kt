@@ -6,6 +6,7 @@ import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Paint
@@ -21,6 +22,7 @@ import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.ContextCompat.startActivity
 import com.tcenter.tcenter.R
 import com.tcenter.tcenter.TicketView
+import com.tcenter.tcenter.entity.Ticket
 import com.tcenter.tcenter.helper.TicketStatus
 import kotlinx.android.synthetic.main.activity_ticket_view.view.*
 import kotlinx.coroutines.delay
@@ -303,15 +305,15 @@ class TicketsService {
         }
     }
 
-    fun createTicket()
+    fun createTicket(ticket: Ticket, sp: SharedPreferences)
     {
-        val projectName = "Android"
-        val topic       = "Android Create Ticket Test"
-        val addedUserId = 150
-        val receivedUserId = 150
-        val deadLine = "2020-07-08 11:40:59"
-        val urgentStatus = true
-        val content = "Test ticket created via android tceneter app"
+        val projectName = ticket.getProjectName()
+        val topic       = ticket.getTopic()
+        val addedUserId = sp.getInt("ID", 0)
+        val receivedUserId = ticket.getReceiverId()
+        val deadLine = ticket.getDeadline()
+        val urgentStatus = ticket.getUrgentStatus()
+        val content = ticket.getContent()
 
         val rs = RequestService()
         val createTicketJsonResponse: JSONObject = JSONObject(rs.createTicketRequest(projectName, topic, addedUserId, receivedUserId, deadLine, urgentStatus, content))

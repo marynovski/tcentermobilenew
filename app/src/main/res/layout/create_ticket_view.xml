@@ -130,26 +130,26 @@
         android:ems="10"
         android:hint="@string/projectName"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName4"
+        app:layout_constraintBottom_toTopOf="@+id/receiverUserInput"
         app:layout_constraintEnd_toStartOf="@+id/guideline12"
         app:layout_constraintStart_toStartOf="@+id/guideline11"
         app:layout_constraintTop_toBottomOf="@+id/topicInput" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName4"
+        android:id="@+id/receiverUserInput"
         android:layout_width="328dp"
         android:layout_height="66dp"
         android:backgroundTint="#D12043"
         android:ems="10"
         android:hint="@string/receiverUser"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/textView7"
+        app:layout_constraintBottom_toTopOf="@+id/deadlineInput"
         app:layout_constraintEnd_toStartOf="@+id/guideline12"
         app:layout_constraintStart_toStartOf="@+id/guideline11"
         app:layout_constraintTop_toBottomOf="@+id/projectNameInput" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/deadlineInput"
         android:layout_width="164dp"
         android:layout_height="66dp"
         android:gravity="clip_horizontal|center"
@@ -159,7 +159,7 @@
         app:layout_constraintBottom_toTopOf="@+id/contentScroll"
         app:layout_constraintEnd_toStartOf="@+id/guideline13"
         app:layout_constraintStart_toStartOf="@+id/guideline11"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName4" />
+        app:layout_constraintTop_toBottomOf="@+id/receiverUserInput" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline20"
@@ -170,7 +170,7 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/urgentCheckbox"
         android:layout_width="162dp"
         android:layout_height="64dp"
         android:layout_marginTop="2dp"
@@ -180,7 +180,7 @@
         app:layout_constraintBottom_toTopOf="@+id/contentScroll"
         app:layout_constraintEnd_toStartOf="@+id/guideline12"
         app:layout_constraintStart_toStartOf="@+id/guideline13"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName4" />
+        app:layout_constraintTop_toBottomOf="@+id/receiverUserInput" />
 
     <ScrollView
         android:id="@+id/contentScroll"
@@ -190,7 +190,7 @@
         app:layout_constraintBottom_toTopOf="@+id/submitBtn"
         app:layout_constraintEnd_toStartOf="@+id/guideline12"
         app:layout_constraintStart_toStartOf="@+id/guideline11"
-        app:layout_constraintTop_toBottomOf="@+id/textView7">
+        app:layout_constraintTop_toBottomOf="@+id/deadlineInput">
 
         <EditText
             android:id="@+id/contentInput"
@@ -228,5 +228,13 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline12"
         app:layout_constraintStart_toStartOf="@+id/guideline11"
         app:layout_constraintTop_toBottomOf="@+id/contentScroll" />
+
+    <DatePicker
+        android:id="@+id/deadlineDatePicker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
