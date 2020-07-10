@@ -3,10 +3,8 @@ package com.tcenter.tcenter
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.*
 import com.tcenter.tcenter.entity.Ticket
 import com.tcenter.tcenter.service.TicketsService
@@ -71,6 +69,14 @@ class CreateTicketActivity : AppCompatActivity() {
             val ticket = Ticket(topic, project, receiver, deadline, urgent, content)
             ts.createTicket(ticket, sharedPreferences)
         }
+
+        val suggestions = arrayOf("Kamil Marynowski 0048731041224 - 150", "Kamil Marynowski 0048731041224 - 150", "Kamil Marynowski 0048731041224 - 150", "Kamil Marynowski 0048731041224 - 150", "Kamil Marynowski 0048731041224 - 150", "Kamil Marynowski 0048731041224 - 150", "Kamil Marynowski 0048731041224 - 150", "Kamil Marynowski 0048731041224 - 150")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, suggestions)
+        val autocompletetextview: AutoCompleteTextView = findViewById(R.id.receiverUserInput)
+        autocompletetextview.threshold = 0
+        autocompletetextview.setAdapter(adapter)
+        autocompletetextview.setOnFocusChangeListener { v, hasFocus -> if(hasFocus) autocompletetextview.showDropDown() }
+
 
     }
 }

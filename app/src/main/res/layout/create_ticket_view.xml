@@ -119,7 +119,8 @@
         app:layout_constraintBottom_toTopOf="@+id/projectNameInput"
         app:layout_constraintEnd_toStartOf="@+id/guideline12"
         app:layout_constraintStart_toStartOf="@+id/guideline11"
-        app:layout_constraintTop_toBottomOf="@+id/backBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/backBtn"
+        android:singleLine="true"/>
 
     <EditText
         android:id="@+id/projectNameInput"
@@ -130,23 +131,10 @@
         android:ems="10"
         android:hint="@string/projectName"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/receiverUserInput"
         app:layout_constraintEnd_toStartOf="@+id/guideline12"
         app:layout_constraintStart_toStartOf="@+id/guideline11"
-        app:layout_constraintTop_toBottomOf="@+id/topicInput" />
-
-    <EditText
-        android:id="@+id/receiverUserInput"
-        android:layout_width="328dp"
-        android:layout_height="66dp"
-        android:backgroundTint="#D12043"
-        android:ems="10"
-        android:hint="@string/receiverUser"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/deadlineInput"
-        app:layout_constraintEnd_toStartOf="@+id/guideline12"
-        app:layout_constraintStart_toStartOf="@+id/guideline11"
-        app:layout_constraintTop_toBottomOf="@+id/projectNameInput" />
+        app:layout_constraintTop_toBottomOf="@+id/topicInput"
+        android:singleLine="true"/>
 
     <TextView
         android:id="@+id/deadlineInput"
@@ -156,10 +144,10 @@
         android:text="@string/setDeadline"
         android:textAlignment="center"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/contentScroll"
         app:layout_constraintEnd_toStartOf="@+id/guideline13"
         app:layout_constraintStart_toStartOf="@+id/guideline11"
-        app:layout_constraintTop_toBottomOf="@+id/receiverUserInput" />
+        app:layout_constraintTop_toBottomOf="@+id/receiverUserInput"
+        android:singleLine="true"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline20"
@@ -173,21 +161,17 @@
         android:id="@+id/urgentCheckbox"
         android:layout_width="162dp"
         android:layout_height="64dp"
-        android:layout_marginTop="2dp"
         android:backgroundTint="#D12043"
         android:buttonTint="#D12043"
         android:text="@string/urgent"
-        app:layout_constraintBottom_toTopOf="@+id/contentScroll"
         app:layout_constraintEnd_toStartOf="@+id/guideline12"
         app:layout_constraintStart_toStartOf="@+id/guideline13"
         app:layout_constraintTop_toBottomOf="@+id/receiverUserInput" />
 
     <ScrollView
         android:id="@+id/contentScroll"
-        android:layout_width="331dp"
-        android:layout_height="131dp"
-        android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/submitBtn"
+        android:layout_width="323dp"
+        android:layout_height="134dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline12"
         app:layout_constraintStart_toStartOf="@+id/guideline11"
         app:layout_constraintTop_toBottomOf="@+id/deadlineInput">
@@ -220,8 +204,8 @@
 
     <Button
         android:id="@+id/submitBtn"
-        android:layout_width="325dp"
-        android:layout_height="65dp"
+        android:layout_width="328dp"
+        android:layout_height="63dp"
         android:backgroundTint="#D12043"
         android:text="@string/submit"
         android:textColor="#FFFFFF"
@@ -236,5 +220,15 @@
         android:visibility="gone"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
+
+    <AutoCompleteTextView
+        android:id="@+id/receiverUserInput"
+        android:layout_width="328dp"
+        android:layout_height="66dp"
+        android:backgroundTint="#D12043"
+        android:hint="@string/receiverUser"
+        app:layout_constraintEnd_toStartOf="@+id/guideline12"
+        app:layout_constraintStart_toStartOf="@+id/guideline11"
+        app:layout_constraintTop_toBottomOf="@+id/projectNameInput" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
