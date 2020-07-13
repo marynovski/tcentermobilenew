@@ -37,25 +37,25 @@ class TicketListActivity : AppCompatActivity() {
         toDoBtn.setOnClickListener()
         {
 
-            ticketsTypeHeader.text = R.string.toDo.toString()
+            ticketsTypeHeader.text = getString(R.string.toDo)
             ts.getTicketsByUserIdAndTicketStatus(userId, TicketStatus.TO_DO, ticketListLayout, applicationContext, ticketListScrollView, 0)
         }
 
         solvedBtn.setOnClickListener()
         {
-            ticketsTypeHeader.text = R.string.solved.toString()
+            ticketsTypeHeader.text = getString(R.string.solved)
             ts.getTicketsByUserIdAndTicketStatus(userId, TicketStatus.SOLVED, ticketListLayout, applicationContext, ticketListScrollView, 0)
         }
 
         sentByMeBtn.setOnClickListener()
         {
-            ticketsTypeHeader.text = R.string.sentByMe.toString()
+            ticketsTypeHeader.text = getString(R.string.sentByMe)
             ts.getTicketsByUserIdAndTicketStatus(userId, TicketStatus.SENT_BY_ME, ticketListLayout, applicationContext, ticketListScrollView, 0)
         }
 
         sentDoneBtn.setOnClickListener()
         {
-            ticketsTypeHeader.text = R.string.sentDone.toString()
+            ticketsTypeHeader.text = getString(R.string.sentDone)
             ts.getTicketsByUserIdAndTicketStatus(userId, TicketStatus.SENT_DONE, ticketListLayout, applicationContext, ticketListScrollView, 0)
         }
 
