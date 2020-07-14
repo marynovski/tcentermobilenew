@@ -7,7 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
 import com.tcenter.tcenter.entity.Ticket
+import com.tcenter.tcenter.service.RequestService
 import com.tcenter.tcenter.service.TicketsService
+import org.json.JSONArray
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -61,7 +64,9 @@ class CreateTicketActivity : AppCompatActivity() {
         submitBtn.setOnClickListener {
             val topic: String = topicInput.text.toString()
             val project: String = projectNameInput.text.toString()
-            val receiver: Int = receiverUserInput.text.toString().toInt()
+            val receiverString: String = receiverUserInput.text.toString()
+            val receiver_string: List<String> = receiverString.split(" ")
+            val receiver: Int = receiver_string[3].toInt()
             val deadline: String = deadlineInput.text.toString()
             val urgent: Boolean = urgentCheckBox.isChecked
             val content: String = contentInput.text.toString()
@@ -70,13 +75,26 @@ class CreateTicketActivity : AppCompatActivity() {
             ts.createTicket(ticket, sharedPreferences)
         }
 
-        val suggestions = arrayOf("Kamil Marynowski 0048731041224 - 150", "Kamil Marynowski 0048731041224 - 150", "Kamil Marynowski 0048731041224 - 150", "Kamil Marynowski 0048731041224 - 150", "Kamil Marynowski 0048731041224 - 150", "Kamil Marynowski 0048731041224 - 150", "Kamil Marynowski 0048731041224 - 150", "Kamil Marynowski 0048731041224 - 150")
+        val rs = RequestService()
+        val active_users_response: JSONObject = JSONObject(rs.getActiveUsersRequest())
+        val active_users: JSONArray = active_users_response.getJSONArray("response")
+        var suggestions = mutableListOf<String>()
+
+        for (i in 0 until active_users.length()) {
+            val user: JSONObject = active_users.getJSONObject(i)
+            val id = user.get("id")
+            val fullName = user.get("fullName")
+            val phone = user.get("phone")
+            val userString = "$fullName $phone $id"
+
+            suggestions.add(i, userString)
+
+        }
+
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, suggestions)
         val autocompletetextview: AutoCompleteTextView = findViewById(R.id.receiverUserInput)
         autocompletetextview.threshold = 0
         autocompletetextview.setAdapter(adapter)
         autocompletetextview.setOnFocusChangeListener { v, hasFocus -> if(hasFocus) autocompletetextview.showDropDown() }
-
-
     }
 }
