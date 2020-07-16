@@ -62,14 +62,14 @@ class CreateTicketActivity : AppCompatActivity() {
 
         val ts = TicketsService()
         submitBtn.setOnClickListener {
-            val topic: String = topicInput.text.toString()
-            val project: String = projectNameInput.text.toString()
-            val receiverString: String = receiverUserInput.text.toString()
-            val receiver_string: List<String> = receiverString.split(" ")
-            val receiver: Int = receiver_string[3].toInt()
-            val deadline: String = deadlineInput.text.toString()
-            val urgent: Boolean = urgentCheckBox.isChecked
-            val content: String = contentInput.text.toString()
+            val topic: String              = topicInput.text.toString()
+            val project: String            = projectNameInput.text.toString()
+            val receiverString: String     = receiverUserInput.text.toString()
+            val receiverData: List<String> = receiverString.split(" ")
+            val receiver: Int              = receiverData[3].toInt()
+            val deadline: String           = deadlineInput.text.toString()
+            val urgent: Boolean            = urgentCheckBox.isChecked
+            val content: String            = contentInput.text.toString()
 
             val ticket = Ticket(topic, project, receiver, deadline, urgent, content)
             ts.createTicket(ticket, sharedPreferences)

@@ -61,8 +61,6 @@ class TicketListActivity : AppCompatActivity() {
             val intent = Intent(this, CreateTicketActivity::class.java)
             startActivity(intent)
         }
-
-
     }
 //LOGOUT PROCEDURE
 //    println("CLICK LOGOUT")

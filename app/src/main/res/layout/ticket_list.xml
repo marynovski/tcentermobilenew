@@ -96,7 +96,7 @@
     <ScrollView
         android:id="@+id/ticketsScroll"
         android:layout_width="0dp"
-        android:layout_height="395dp"
+        android:layout_height="0dp"
         android:background="#FAF5F5"
         android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@+id/percentLine8"
@@ -145,8 +145,8 @@
 
     <ImageButton
         android:id="@+id/toDoBtn"
-        android:layout_width="92dp"
-        android:layout_height="75dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:backgroundTint="#FFFFFF"
         app:layout_constraintEnd_toStartOf="@+id/downButtonsLine1"
         app:layout_constraintStart_toStartOf="@+id/rightMarginLine"
