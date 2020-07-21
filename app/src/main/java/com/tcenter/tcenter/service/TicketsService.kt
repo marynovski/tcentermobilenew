@@ -2,34 +2,29 @@ package com.tcenter.tcenter.service
 
 import android.Manifest
 import android.app.Activity
-import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.text.htmlEncode
 import com.tcenter.tcenter.R
 import com.tcenter.tcenter.TicketView
 import com.tcenter.tcenter.entity.Ticket
-import com.tcenter.tcenter.helper.TicketStatus
-import kotlinx.android.synthetic.main.activity_ticket_view.view.*
-import kotlinx.coroutines.delay
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import java.lang.Thread.sleep
 
 
 //}http://www.tcenter.pl/api/v/mobile/get-tickets
@@ -95,17 +90,18 @@ class TicketsService {
                 val ticketViewLayout = LinearLayout(context)
                 ticketViewLayout.setOrientation(LinearLayout.VERTICAL);
                 ticketViewLayout.setPadding(100, 20, 100, 20)
+                ticketViewLayout.setBackgroundColor(Color.parseColor("#333333"))
 
                 /** TICKET PREVIEW CONFIG */
 
                 val topicTextView: TextView = TextView(context)
                 topicTextView.setText(topic)
                 topicTextView.textSize = 24.0F
-                topicTextView.setTextColor(Color.BLACK)
-                topicTextView.setTypeface(null, Typeface.BOLD);
+                topicTextView.setTextColor(Color.WHITE)
 
                 val contentTextView: TextView = TextView(context)
                 contentTextView.setText(content)
+                contentTextView.setTextColor(Color.WHITE)
                 contentTextView.textSize = 16.0F
 
                 val deadlineTextView: TextView = TextView(context)
@@ -115,7 +111,9 @@ class TicketsService {
                 deadlineTextView.typeface = Typeface.DEFAULT_BOLD
 
                 if (ds.checkIfDeadlineIsOver(ticket.getJSONObject("deadlineTime")) && status == 1 || status == 3) {
-                    deadlineTextView.setTextColor(Color.parseColor("#D12043"))
+                    deadlineTextView.setTextColor(Color.parseColor("#e83e0f"))
+                } else {
+                    deadlineTextView.setTextColor(Color.WHITE)
                 }
 
                 ticketViewLayout.addView(topicTextView)
@@ -123,6 +121,10 @@ class TicketsService {
                 ticketViewLayout.addView(deadlineTextView)
 
                 ticketListLayout.addView(ticketViewLayout)
+
+                val param = ticketViewLayout.layoutParams as ViewGroup.MarginLayoutParams
+                param.setMargins(0,0,0,2)
+                ticketViewLayout.layoutParams = param
 
                 ticketViewLayout.setOnClickListener()
                 {
@@ -171,7 +173,7 @@ class TicketsService {
     fun makeTicketView(ticketId: Int, userId: Int, activity: Activity, ticketStatus: Int)
     {
 
-        val backTextView: TextView = activity.findViewById(R.id.backHeaderText)
+        val backTextView: TextView = activity.findViewById(R.id.back_header_text)
         backTextView.setText("Back")
 
 
@@ -233,8 +235,11 @@ class TicketsService {
             val fileName: String = attachments[i] as String
             val attachmentsScroll: LinearLayout = activity.findViewById(R.id.attachementsList)
             val attachmentImageButton: ImageButton = ImageButton(activity.applicationContext)
+
             attachmentImageButton.setImageResource(R.drawable.ic_launcher_foreground)
             attachmentsScroll.addView(attachmentImageButton)
+            attachmentImageButton.layoutParams.width = 250
+            attachmentsScroll.requestLayout()
 
             val rs = RequestService()
             attachmentImageButton.setOnClickListener()
@@ -255,55 +260,91 @@ class TicketsService {
             }
         }
 
-            val closeTicketButton: Button = activity.findViewById(R.id.closeTicketBtn)
-            closeTicketButton.setOnClickListener() {
-                this.closeTicket(id.toInt(), userId, activity)
-            }
-
-            val reopenTicketButton: Button = activity.findViewById(R.id.reopenTicketButton)
-            reopenTicketButton.setOnClickListener() {
-                this.reopenTicket(id.toInt(), userId, activity)
-            }
-    }
-
-    private fun closeTicket(id: Int, userId: Int, activity: Activity)
-    {
+        /** SHOW MESSAGES */
         val rs = RequestService()
-        if(rs.closeTicketRequest(id, userId) == "true") {
-            Toast.makeText(activity.applicationContext , "Ticket has been closed", Toast.LENGTH_SHORT).show()
+        var messagesResponse = rs.getMessagesRequest(ticketId)
+//        println(messagesResponse)
+        messagesResponse = messagesResponse.substring(1, messagesResponse.length-1)
+        messagesResponse = messagesResponse.replace("\\u0022", "\"")
+        val messageJson = JSONObject(messagesResponse)
+        println(messageJson)
 
-            val closeTicketBtn: Button = activity.findViewById(R.id.closeTicketBtn)
-            val reopenTicketBtn: Button = activity.findViewById(R.id.reopenTicketButton)
+        val messages = messageJson.getJSONArray("data")
+        for (i in 0 until messages.length())
+        {
+            val messageData = JSONObject(messages[i].toString())
+            val senderData = messageData.getJSONObject("recipient")
+            val receiverData = messageData.getJSONObject("receiver")
+            val message = messageData.getJSONObject("messageData")
 
-            closeTicketBtn.visibility = View.INVISIBLE
-            reopenTicketBtn.visibility = View.VISIBLE
-        } else {
-            Toast.makeText(activity.applicationContext, "Ticket hasn't been closed", Toast.LENGTH_SHORT).show()
+            val senderId = senderData.getInt("id")
+            val userId = 150
+            val messageContent: String = message.getString("message")
+            val messageTextView = TextView(activity.applicationContext)
+            val messagesBoxLayout = activity.findViewById<LinearLayout>(R.id.messages_box_layout)
+            messageTextView.text = messageContent
+            if (senderId == userId) {
+                messageTextView.setBackgroundColor(Color.parseColor("#333333"))
+                messageTextView.setTextColor(Color.parseColor("#FFFFFF"))
+            } else {
+                messageTextView.setBackgroundColor(Color.parseColor("#818181"))
+                messageTextView.setTextColor(Color.parseColor("#333333"))
+            }
+            messagesBoxLayout.addView(messageTextView)
         }
 
 
+
+
+//            val closeTicketButton: Button = activity.findViewById(R.id.closeTicketBtn)
+//            closeTicketButton.setOnClickListener() {
+//                this.closeTicket(id.toInt(), userId, activity)
+//            }
+//
+//            val reopenTicketButton: Button = activity.findViewById(R.id.reopenTicketButton)
+//            reopenTicketButton.setOnClickListener() {
+//                this.reopenTicket(id.toInt(), userId, activity)
+//            }
     }
 
-    private fun reopenTicket(id: Int, userId: Int, activity: Activity)
-    {
-        val rs = RequestService()
-        val reopen_ticket_json_response: JSONObject = JSONObject(rs.reopenTicketRequest(id, userId))
+//    private fun closeTicket(id: Int, userId: Int, activity: Activity)
+//    {
+//        val rs = RequestService()
+//        if(rs.closeTicketRequest(id, userId) == "true") {
+//            Toast.makeText(activity.applicationContext , "Ticket has been closed", Toast.LENGTH_SHORT).show()
+//
+//            val closeTicketBtn: Button = activity.findViewById(R.id.closeTicketBtn)
+//            val reopenTicketBtn: Button = activity.findViewById(R.id.reopenTicketButton)
+//
+//            closeTicketBtn.visibility = View.INVISIBLE
+//            reopenTicketBtn.visibility = View.VISIBLE
+//        } else {
+//            Toast.makeText(activity.applicationContext, "Ticket hasn't been closed", Toast.LENGTH_SHORT).show()
+//        }
+//
+//
+//    }
 
-        val responseMessage: String = reopen_ticket_json_response.getString("msg")
-        val result: Boolean = reopen_ticket_json_response.getBoolean("result")
-
-        if (result) {
-            Toast.makeText(activity.applicationContext , responseMessage, Toast.LENGTH_SHORT).show()
-
-            val closeTicketBtn: Button  = activity.findViewById(R.id.closeTicketBtn)
-            val reopenTicketBtn: Button = activity.findViewById(R.id.reopenTicketButton)
-
-            closeTicketBtn.visibility = View.VISIBLE
-            reopenTicketBtn.visibility = View.INVISIBLE
-        } else {
-            Toast.makeText(activity.applicationContext, responseMessage, Toast.LENGTH_SHORT).show()
-        }
-    }
+//    private fun reopenTicket(id: Int, userId: Int, activity: Activity)
+//    {
+//        val rs = RequestService()
+//        val reopen_ticket_json_response: JSONObject = JSONObject(rs.reopenTicketRequest(id, userId))
+//
+//        val responseMessage: String = reopen_ticket_json_response.getString("msg")
+//        val result: Boolean = reopen_ticket_json_response.getBoolean("result")
+//
+//        if (result) {
+//            Toast.makeText(activity.applicationContext , responseMessage, Toast.LENGTH_SHORT).show()
+//
+//            val closeTicketBtn: Button  = activity.findViewById(R.id.closeTicketBtn)
+//            val reopenTicketBtn: Button = activity.findViewById(R.id.reopenTicketButton)
+//
+//            closeTicketBtn.visibility = View.VISIBLE
+//            reopenTicketBtn.visibility = View.INVISIBLE
+//        } else {
+//            Toast.makeText(activity.applicationContext, responseMessage, Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
     fun createTicket(ticket: Ticket, sp: SharedPreferences)
     {

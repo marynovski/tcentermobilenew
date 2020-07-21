@@ -5,6 +5,7 @@ import android.os.Environment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import okhttp3.*
 import org.json.JSONException
 import java.io.*
 import java.net.HttpURLConnection
@@ -267,11 +268,11 @@ class RequestService {
     /** === */
 
 
-    fun closeTicketRequest(ticketId: Int, userId: Int): String {
+    fun closeTicketRequest(ticketId: Int, userId: Int, message: String): String {
         println("START CLOSE TICKET REQUEST")
         var jsonResponse: String = "{}"
         runBlocking {
-            val getCloseTicketJob = async(Dispatchers.IO) { closeTicketJob(ticketId, userId) }
+            val getCloseTicketJob = async(Dispatchers.IO) { closeTicketJob(ticketId, userId, message) }
 
             runBlocking(block = {
                 jsonResponse = getCloseTicketJob.await()
@@ -282,9 +283,9 @@ class RequestService {
         return jsonResponse
     }
 
-    fun closeTicketJob(ticketId: Int, userId: Int) = runBlocking()
+    fun closeTicketJob(ticketId: Int, userId: Int, message: String) = runBlocking()
     {
-        val json = "{\"params\":{\"ticketId\":\"$ticketId\",\"userId\":\"$userId\",\"message\":\"Ticket closed via Tcenter Mobile\"}}"
+        val json = "{\"params\":{\"ticketId\":\"$ticketId\",\"userId\":\"$userId\",\"message\":\"$message\"}}"
         var jsonResponse: String = "{}"
 
         /** http://www.tcenter.pl/api/v/mobile/get-ticket */
@@ -330,11 +331,11 @@ class RequestService {
         return@runBlocking jsonResponse
     }
 
-    fun reopenTicketRequest(ticketId: Int, userId: Int): String {
+    fun reopenTicketRequest(ticketId: Int, userId: Int, message: String): String {
         println("START Reopen TICKET REQUEST")
         var jsonResponse: String = "{}"
         runBlocking {
-            val getReopenTicketJob = async(Dispatchers.IO) { reopenTicketJob(ticketId, userId) }
+            val getReopenTicketJob = async(Dispatchers.IO) { reopenTicketJob(ticketId, userId, message) }
 
             runBlocking(block = {
                 jsonResponse = getReopenTicketJob.await()
@@ -345,9 +346,9 @@ class RequestService {
         return jsonResponse
     }
 
-    fun reopenTicketJob(ticketId: Int, userId: Int) = runBlocking()
+    fun reopenTicketJob(ticketId: Int, userId: Int, message: String) = runBlocking()
     {
-        val json = "{\"ticketId\":\"$ticketId\",\"userId\":\"$userId\",\"message\":\"Ticket reopened via Tcenter Mobile\"}"
+        val json = "{\"ticketId\":\"$ticketId\",\"userId\":\"$userId\",\"message\":\"$message\"}"
         var jsonResponse: String = "{}"
 
         /** http://www.tcenter.pl/api/v/mobile/get-ticket */
@@ -482,6 +483,127 @@ class RequestService {
 
         /** http://www.tcenter.pl/api/v/mobile/get-ticket */
         val url: URL = URL("http://188.68.224.36:8194/api/v/mobile/get-active-users")
+        try {
+            val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
+            conn.requestMethod = "POST"
+            conn.setRequestProperty("Content-Type", "application/json; utf-8")
+            conn.setRequestProperty("Charset", "utf-8")
+            conn.setRequestProperty("Accept", "application/json")
+            conn.setRequestProperty("Authorization", "7f137082d82368af5968aac4150b3854644b5957")
+            conn.doOutput = true
+
+            conn.outputStream.use { os ->
+                val input = json.toByteArray(charset("utf-8"))
+                os.write(input, 0, input.size)
+            }
+
+            BufferedReader(
+                InputStreamReader(conn.inputStream, "utf-8")
+            ).use { br ->
+                val response = StringBuilder()
+                var responseLine: String? = null
+                while (br.readLine().also { responseLine = it } != null) {
+                    response.append(responseLine!!.trim { it <= ' ' })
+                }
+                jsonResponse = response.toString()
+                conn.disconnect()
+            }
+
+
+        } catch (e: MalformedURLException) {
+            e.printStackTrace()
+        }
+        catch (e: JSONException) {
+            e.printStackTrace()
+        }
+        catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return@runBlocking jsonResponse
+    }
+
+    fun sendTextMessageRequest(ticketId: Int, receiverId: Int, recipientId: Int, message: String ): String
+    {
+        println("START SEND TEXT MESSAGE REQUEST")
+        var responseOk = "KO"
+        runBlocking {
+            val sendTextMessageRequestJob = async(Dispatchers.IO) { sendTextMessageRequestJob(ticketId, receiverId, recipientId, message) }
+
+            runBlocking(block = {
+                responseOk = sendTextMessageRequestJob.await()
+            })
+        }
+
+        println("FINISH SEND TEXT MESSAGE REQUEST")
+        return responseOk
+    }
+
+    fun sendTextMessageRequestJob(ticketId: Int, receiverId: Int, recipientId: Int, message: String ):String = runBlocking()
+    {
+        /** http://www.tcenter.pl/api/v/mobile/add-message */
+        val url: URL = URL("http://188.68.224.36:8194/api/v/mobile/add-message")
+        var responseOk: String = "KO"
+        try {
+            var client = OkHttpClient().newBuilder().build()
+            var mediaType = MediaType.parse("application/json; utf-8")
+            var body = MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("files", "")
+                .addFormDataPart("params", "{" +
+                        "\"ticketId\": $ticketId," +
+                        "\"receiverId\": $receiverId," +
+                        "\"recipientId\": \"$recipientId\"," +
+                        "\"type\": \"1\",\n" +
+                        "\"number\": \"10\",\n" +
+                        "\"message\": \"$message\"" +
+                        "}").build()
+            var request = Request.Builder()
+                .url(url)
+                .method("POST", body)
+                .addHeader("Content-Type", "application/json; utf-8")
+                .addHeader("Authorization", "7f137082d82368af5968aac4150b3854644b5957")
+                .addHeader("Accept", "application/json")
+                .addHeader("Charset", "utf-8")
+                .build()
+            var response = client.newCall(request).execute()
+            if (response.isSuccessful) {
+                responseOk = "OK"
+            }
+        } catch (e: MalformedURLException) {
+            e.printStackTrace()
+        }
+        catch (e: JSONException) {
+            e.printStackTrace()
+        }
+        catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return@runBlocking responseOk
+    }
+
+    fun getMessagesRequest(ticketId: Int): String {
+        println("START SEND TEXT MESSAGE REQUEST")
+        var jsonResponse = "{}"
+        runBlocking {
+            val getMessagesRequestJob = async(Dispatchers.IO) { getMessagesRequestJob(ticketId) }
+
+            runBlocking(block = {
+                jsonResponse = getMessagesRequestJob.await()
+            })
+        }
+
+        println("FINISH SEND TEXT MESSAGE REQUEST")
+        return jsonResponse
+    }
+
+    fun getMessagesRequestJob(ticketId: Int) = runBlocking()
+    {
+        val json = "{\"params\": { \"ticketId\": \"$ticketId\"}}"
+        var jsonResponse: String = "{}"
+        println(json)
+        /** http://www.tcenter.pl/api/v/mobile/add-message */
+        val url: URL = URL("http://188.68.224.36:8194/api/v/mobile/get-ticket-messeges")
         try {
             val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
             conn.requestMethod = "POST"

@@ -16,21 +16,21 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/backBtn"
+            android:id="@+id/ackBtn"
             android:layout_width="53dp"
             android:layout_height="31dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="12dp"
             android:background="#FFFFFF"
-            app:layout_constraintBottom_toTopOf="@+id/backHeaderText"
+            app:layout_constraintBottom_toTopOf="@+id/back_header_text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/abc_vector_test"
             tools:srcCompat="?attr/homeAsUpIndicator" />
 
         <TextView
-            android:id="@+id/backHeaderText"
+            android:id="@+id/back_header_text"
             android:layout_width="57dp"
             android:layout_height="29dp"
             android:layout_marginStart="18dp"
@@ -42,7 +42,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/backBtn"
+            app:layout_constraintTop_toBottomOf="@+id/ackBtn"
             tools:text="@string/back" />
 
         <TextView

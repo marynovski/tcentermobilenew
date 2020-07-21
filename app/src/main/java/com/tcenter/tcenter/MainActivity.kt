@@ -9,7 +9,7 @@ import android.os.Bundle
 class MainActivity : AppCompatActivity() {
 
     private fun redirectToLoginActivity() {
-        val intent = Intent(this, LoginActivitty::class.java)
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }
 
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Checks if user is loged in and redirect him to:
+     * Checks if user is logged in and redirect him to:
      * Login activity if he's not
      * Or
      * Ticket list view if he is

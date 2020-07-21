@@ -1,29 +1,24 @@
 package com.tcenter.tcenter
 
-import android.app.DownloadManager
-import android.content.Context
-import android.content.Context.DOWNLOAD_SERVICE
 import android.content.Intent
-import android.net.Uri
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
-import androidx.core.content.ContextCompat
+import android.widget.*
+import com.tcenter.tcenter.service.ChatService
 import com.tcenter.tcenter.service.RequestService
 import com.tcenter.tcenter.service.TicketsService
 import kotlinx.android.synthetic.main.ticket_view.*
 
 class TicketView : AppCompatActivity() {
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ticket_view)
 
-        val reopenTicketBtn: Button = findViewById(R.id.reopenTicketButton)
-        val closeTicketBtn: Button  = findViewById(R.id.closeTicketBtn)
+
 
         /** get ticket id and user id parameters to load data for it */
         val b: Bundle = intent.extras!!
@@ -38,9 +33,46 @@ class TicketView : AppCompatActivity() {
         ts.makeTicketView(ticketId, userId, this, ticketStatus)
 
         /** BACK BUTTON SET ON CLICK LSITENER */
-        val backBtn: ImageButton = findViewById(R.id.backBtn)
+        val backBtn: ImageView = findViewById(R.id.back_button)
         backBtn.setOnClickListener() {
             this.redirectToTicketListActivity()
+        }
+
+        /** SEND TEXT MESSAGE */
+        val cs = ChatService()
+        val rs = RequestService()
+        val messageInput: EditText = findViewById(R.id.message_input)
+        val sendMsgBtn: ImageView = findViewById(R.id.send_message_button)
+        val reopenTicketCheckBox: CheckBox = findViewById(R.id.reopen_ticket_checkbox)
+        val closeTicketCheckbox: CheckBox  = findViewById(R.id.close_ticket_checkbox)
+        sendMsgBtn.setOnClickListener {
+            val message: String = messageInput.text.toString()
+            val closingTicket: Boolean = closeTicketCheckbox.isChecked
+            val reopeningTicket: Boolean = reopenTicketCheckBox.isChecked
+            /** CLEAR MSG INPUT */
+            messageInput.text.clear()
+            if (closingTicket) {
+                if (message == "") {
+                    Toast.makeText(applicationContext, "Message cannot be empty", Toast.LENGTH_SHORT).show()
+                } else {
+                    rs.closeTicketRequest(ticketId, userId, message)
+                    reopenTicketCheckBox.visibility = View.VISIBLE
+                    closeTicketCheckbox.visibility  = View.GONE
+                    closeTicketCheckbox.isChecked = false
+                }
+            } else if(reopeningTicket) {
+                if (message == "") {
+                    Toast.makeText(applicationContext, "Message cannot be empty", Toast.LENGTH_SHORT).show()
+                } else {
+                    rs.reopenTicketRequest(ticketId, userId, message)
+                    reopenTicketCheckBox.visibility = View.GONE
+                    closeTicketCheckbox.visibility  = View.VISIBLE
+                    reopenTicketCheckBox.isChecked = false
+                }
+            }
+            else {
+                cs.sendTextMessage(ticketId, 150, userId, message, this)
+            }
         }
     }
 
@@ -58,13 +90,19 @@ class TicketView : AppCompatActivity() {
      */
     private fun showOrHideReopenTicketBtn(status: Int)
     {
+        val reopenTicketCheckBox: CheckBox = findViewById(R.id.reopen_ticket_checkbox)
+        val closeTicketCheckbox: CheckBox  = findViewById(R.id.close_ticket_checkbox)
+
         if (status == 1 || status == 3) {
-            reopenTicketButton.visibility = View.GONE
-            closeTicketBtn.visibility     = View.VISIBLE
+            reopenTicketCheckBox.visibility = View.GONE
+            closeTicketCheckbox.visibility  = View.VISIBLE
         } else {
-            reopenTicketButton.visibility = View.VISIBLE
-            closeTicketBtn.visibility     = View.GONE
+            reopenTicketCheckBox.visibility = View.VISIBLE
+            closeTicketCheckbox.visibility  = View.GONE
         }
     }
+
+
+
 
 }
