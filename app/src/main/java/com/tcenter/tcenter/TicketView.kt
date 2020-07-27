@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.core.app.ActivityCompat
 import com.tcenter.tcenter.service.ChatService
 import com.tcenter.tcenter.service.RequestService
 import com.tcenter.tcenter.service.TicketsService
@@ -73,6 +74,17 @@ class TicketView : AppCompatActivity() {
             else {
                 cs.sendTextMessage(ticketId, 150, userId, message, this)
             }
+        }
+
+        upload_file_button.setOnClickListener {
+            val intent = Intent()
+                .setType("*/*")
+                .setAction(Intent.ACTION_GET_CONTENT)
+
+            ActivityCompat.startActivityForResult(
+                this,
+                Intent.createChooser(intent, "Select a file"),
+                111, null)
         }
     }
 

@@ -343,7 +343,7 @@
         app:srcCompat="@drawable/send_msg_button" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/upload_file_button"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline10"

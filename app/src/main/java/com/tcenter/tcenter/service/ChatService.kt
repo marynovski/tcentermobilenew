@@ -2,6 +2,8 @@ package com.tcenter.tcenter.service
 
 import android.app.Activity
 import android.graphics.Color
+import android.view.Gravity
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast

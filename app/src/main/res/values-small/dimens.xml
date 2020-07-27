@@ -3,4 +3,5 @@
     <dimen name="text_size_24">12sp</dimen>
     <dimen name="text_size_18">12sp</dimen>
     <dimen name="text_size_36">26sp</dimen>
+    <dimen name="text_size_14">10sp</dimen>
 </resources>

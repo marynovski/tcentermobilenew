@@ -12,13 +12,14 @@ import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.app.ActivityCompat.requestPermissions
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.ContextCompat.startActivity
-import androidx.core.text.htmlEncode
 import com.tcenter.tcenter.R
 import com.tcenter.tcenter.TicketView
 import com.tcenter.tcenter.entity.Ticket
@@ -32,30 +33,21 @@ import org.json.JSONObject
 class TicketsService {
 
     private val STORAGE_PERMISSION_CODE: Int = 1000
-    private val TO_DO: Int      = 1
-    private val SOLVED: Int     = 2
-    private val SENT_BY_ME: Int = 3
-    private val SENT_DONE: Int  = 4
 
     fun getTicketsByUserIdAndTicketStatus(userId: Int, status: Int, ticketListLayout: LinearLayout, context: Context, scrollView: ScrollView, loadedTicketsCount: Int) {
         /** PARSE JSON */
         var jsonResponse: JSONObject = JSONObject("{}")
-        val rs: RequestService = RequestService()
-        val response = rs.getTicketsRequest(userId, status, loadedTicketsCount-2, loadedTicketsCount+10)
-        println(response)
+        val rs = RequestService()
+        val response: String = rs.getTicketsRequest(userId, status, loadedTicketsCount-2, loadedTicketsCount+10)
 
         var isResponseNull: Boolean
 
-        if (response == "{}" ) {
-            isResponseNull = true
-        } else {
-            isResponseNull = false
-        }
+        isResponseNull = response == "{}"
 
         try {
             jsonResponse = JSONObject("{\"json\": $response}")
         }  catch (e: JSONException) {
-            Log.e("JSONE", e.toString());
+            Log.e("JSONE", e.toString())
         }
 
 
@@ -88,24 +80,24 @@ class TicketsService {
                 }
 
                 val ticketViewLayout = LinearLayout(context)
-                ticketViewLayout.setOrientation(LinearLayout.VERTICAL);
+                ticketViewLayout.orientation = LinearLayout.VERTICAL
                 ticketViewLayout.setPadding(100, 20, 100, 20)
                 ticketViewLayout.setBackgroundColor(Color.parseColor("#333333"))
 
                 /** TICKET PREVIEW CONFIG */
 
                 val topicTextView: TextView = TextView(context)
-                topicTextView.setText(topic)
+                topicTextView.text = topic
                 topicTextView.textSize = 24.0F
                 topicTextView.setTextColor(Color.WHITE)
 
                 val contentTextView: TextView = TextView(context)
-                contentTextView.setText(content)
+                contentTextView.text = content
                 contentTextView.setTextColor(Color.WHITE)
                 contentTextView.textSize = 16.0F
 
                 val deadlineTextView: TextView = TextView(context)
-                deadlineTextView.setText(deadlineDateTime)
+                deadlineTextView.text = deadlineDateTime
                 deadlineTextView.textSize = 16.0F
                 deadlineTextView.textAlignment = View.TEXT_ALIGNMENT_TEXT_END
                 deadlineTextView.typeface = Typeface.DEFAULT_BOLD
@@ -129,7 +121,7 @@ class TicketsService {
                 ticketViewLayout.setOnClickListener()
                 {
                     val intent = Intent(context, TicketView::class.java)
-                    intent.setFlags(FLAG_ACTIVITY_NEW_TASK)
+                    intent.flags = FLAG_ACTIVITY_NEW_TASK
                     val b: Bundle = Bundle()
                     b.putInt("id", id)
                     b.putInt("userId", userId)
@@ -140,13 +132,15 @@ class TicketsService {
 
             }
 
-            if (json.length() < 10) {
+            if (json.length() < 10 || json.length() < loadedTicketsCount) {
                 Toast.makeText(context, "There are no more tickets", Toast.LENGTH_SHORT).show()
             }
         }
 
         val loadMoreTicketsBtn: Button = Button(context)
-        loadMoreTicketsBtn.setText("Load more tickets...")
+        loadMoreTicketsBtn.text = "Load more tickets..."
+        loadMoreTicketsBtn.setTextColor(Color.parseColor("#FFFFFF"))
+        loadMoreTicketsBtn.setBackgroundColor(Color.parseColor("#333333"))
         ticketListLayout.addView(loadMoreTicketsBtn)
 
         loadMoreTicketsBtn.setOnClickListener()
@@ -156,15 +150,16 @@ class TicketsService {
 
     }
 
-    fun getTicketByIdAndUserId(id: Int, userId: Int): JSONObject {
+    fun getTicketByIdAndUserId(id: Int, userId: Int, context: Context): JSONObject {
         var jsonResponse: JSONObject = JSONObject("{}")
         val rs: RequestService = RequestService()
-        val response = rs.getTicketRequest(id, userId)
         try {
+            val response = rs.getTicketRequest(id, userId)
+
             jsonResponse = JSONObject("{\"json\": $response}")
             println(jsonResponse)
         }  catch (e: JSONException) {
-            Log.e("JSONE", e.toString());
+            Log.e("JSONE", e.toString())
         }
 
         return jsonResponse
@@ -174,11 +169,11 @@ class TicketsService {
     {
 
         val backTextView: TextView = activity.findViewById(R.id.back_header_text)
-        backTextView.setText("Back")
+        backTextView.text = "Back"
 
 
 
-        val jsonResponse: JSONObject = this.getTicketByIdAndUserId(ticketId, userId)
+        val jsonResponse: JSONObject = this.getTicketByIdAndUserId(ticketId, userId, activity.applicationContext)
         val json = JSONArray(jsonResponse.getString("json"))
         println(json)
 
@@ -200,33 +195,33 @@ class TicketsService {
 
         /** SET TOPIC TEXT */
         val ticketTopicTextView: TextView = activity.findViewById(R.id.ticketTopicText)
-        ticketTopicTextView.setText(topic)
+        ticketTopicTextView.text = topic
 
         /** SET CONTENT TEXT */
         val ticketContentText: TextView = activity.findViewById(R.id.ticketContentText)
-        ticketContentText.setText(content)
+        ticketContentText.text = content
 
         /** SET AUTHOR TEXT */
         val ticketAuthorText: TextView = activity.findViewById(R.id.authorText)
-        ticketAuthorText.setText(author)
+        ticketAuthorText.text = author
 
         /** SET COMPANY TEXT */
         val companyText: TextView = activity.findViewById(R.id.companyText)
-        companyText.setText(company)
+        companyText.text = company
 
         /** SET PROJECT TEXT */
         val projectText: TextView = activity.findViewById(R.id.projectName)
-        projectText.setText(project)
+        projectText.text = project
 
         val ds = DateService()
         /** PARSE AND SET DEADLINE DATETIME */
         val deadlineDateTime: String = "Deadline: "+ds.parseDateTime(jsonToParse.getJSONObject("deadlineTime"))
         val deadlineTextView: TextView = activity.findViewById(R.id.deadlineText)
-        deadlineTextView.setText(deadlineDateTime)
+        deadlineTextView.text = deadlineDateTime
         /** PARSE AND SET ADDED/CREATED DATETIME */
         val createdDateTime: String = "Added: "+ds.parseDateTime(jsonToParse.getJSONObject("createdTime"))
         val addedTextView: TextView = activity.findViewById(R.id.addedText)
-        addedTextView.setText(createdDateTime)
+        addedTextView.text = createdDateTime
 
         /** ATTACHMENTS TO DOWNLOAD */
         val attachments: JSONArray = jsonToParse.getJSONArray("attachments")
@@ -283,68 +278,26 @@ class TicketsService {
             val messageTextView = TextView(activity.applicationContext)
             val messagesBoxLayout = activity.findViewById<LinearLayout>(R.id.messages_box_layout)
             messageTextView.text = messageContent
+            messageTextView.setPadding(10, 10, 10, 10)
+            val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT)
             if (senderId == userId) {
                 messageTextView.setBackgroundColor(Color.parseColor("#333333"))
                 messageTextView.setTextColor(Color.parseColor("#FFFFFF"))
+                params.setMargins(250, 5, 10, 5)
+                messageTextView.gravity = Gravity.END
+
             } else {
                 messageTextView.setBackgroundColor(Color.parseColor("#818181"))
                 messageTextView.setTextColor(Color.parseColor("#333333"))
+                params.setMargins(10, 5, 250, 5)
+                messageTextView.gravity = Gravity.START
             }
+            messageTextView.layoutParams = params
             messagesBoxLayout.addView(messageTextView)
         }
-
-
-
-
-//            val closeTicketButton: Button = activity.findViewById(R.id.closeTicketBtn)
-//            closeTicketButton.setOnClickListener() {
-//                this.closeTicket(id.toInt(), userId, activity)
-//            }
-//
-//            val reopenTicketButton: Button = activity.findViewById(R.id.reopenTicketButton)
-//            reopenTicketButton.setOnClickListener() {
-//                this.reopenTicket(id.toInt(), userId, activity)
-//            }
     }
 
-//    private fun closeTicket(id: Int, userId: Int, activity: Activity)
-//    {
-//        val rs = RequestService()
-//        if(rs.closeTicketRequest(id, userId) == "true") {
-//            Toast.makeText(activity.applicationContext , "Ticket has been closed", Toast.LENGTH_SHORT).show()
-//
-//            val closeTicketBtn: Button = activity.findViewById(R.id.closeTicketBtn)
-//            val reopenTicketBtn: Button = activity.findViewById(R.id.reopenTicketButton)
-//
-//            closeTicketBtn.visibility = View.INVISIBLE
-//            reopenTicketBtn.visibility = View.VISIBLE
-//        } else {
-//            Toast.makeText(activity.applicationContext, "Ticket hasn't been closed", Toast.LENGTH_SHORT).show()
-//        }
-//
-//
-//    }
 
-//    private fun reopenTicket(id: Int, userId: Int, activity: Activity)
-//    {
-//        val rs = RequestService()
-//        val reopen_ticket_json_response: JSONObject = JSONObject(rs.reopenTicketRequest(id, userId))
-//
-//        val responseMessage: String = reopen_ticket_json_response.getString("msg")
-//        val result: Boolean = reopen_ticket_json_response.getBoolean("result")
-//
-//        if (result) {
-//            Toast.makeText(activity.applicationContext , responseMessage, Toast.LENGTH_SHORT).show()
-//
-//            val closeTicketBtn: Button  = activity.findViewById(R.id.closeTicketBtn)
-//            val reopenTicketBtn: Button = activity.findViewById(R.id.reopenTicketButton)
-//
-//            closeTicketBtn.visibility = View.VISIBLE
-//            reopenTicketBtn.visibility = View.INVISIBLE
-//        } else {
-//            Toast.makeText(activity.applicationContext, responseMessage, Toast.LENGTH_SHORT).show()
-//        }
-//    }
 
     fun createTicket(ticket: Ticket, sp: SharedPreferences)
     {
@@ -360,6 +313,11 @@ class TicketsService {
         val createTicketJsonResponse: JSONObject = JSONObject(rs.createTicketRequest(projectName, topic, addedUserId, receivedUserId, deadLine, urgentStatus, content))
 
         println(createTicketJsonResponse)
+
+    }
+
+    fun uploadAttachment(activity: Activity)
+    {
 
     }
 }

@@ -8,7 +8,7 @@
     android:background="#595959">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/left_margin"
+        android:id="@+id/left_margin_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -33,13 +33,13 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center_vertical"
-        android:text="@string/app_login_header_text_up_1"
+        android:text="@string/login_header_text_sign_in"
         android:textColor="@color/login_page_font_color"
         android:textSize="@dimen/text_size_24"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/sign_in_header_bottom"
         app:layout_constraintEnd_toStartOf="@+id/right_margin"
-        app:layout_constraintStart_toStartOf="@+id/left_margin"
+        app:layout_constraintStart_toStartOf="@+id/left_margin_2"
         app:layout_constraintTop_toTopOf="@+id/top_margin" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -71,49 +71,49 @@
         app:layout_constraintGuide_percent="0.95" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline67"
+        android:id="@+id/mobile_number_label_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.3" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline31"
+        android:id="@+id/password_input_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.6" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline33"
+        android:id="@+id/mobile_number_input_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.35" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline34"
+        android:id="@+id/password_label_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.45" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline35"
+        android:id="@+id/remember_text_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.9" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline36"
+        android:id="@+id/mobile_number_input_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.45" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline66"
+        android:id="@+id/password_label_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -123,13 +123,13 @@
         android:id="@+id/mobile_number_label"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="Mobile number"
+        android:text="@string/login_label_mobile_number"
         android:textColor="#818181"
         android:textSize="@dimen/text_size_24"
-        app:layout_constraintBottom_toTopOf="@+id/guideline33"
+        app:layout_constraintBottom_toTopOf="@+id/mobile_number_input_top"
         app:layout_constraintEnd_toStartOf="@+id/right_margin"
-        app:layout_constraintStart_toStartOf="@+id/left_margin"
-        app:layout_constraintTop_toTopOf="@+id/guideline67" />
+        app:layout_constraintStart_toStartOf="@+id/left_margin_2"
+        app:layout_constraintTop_toTopOf="@+id/mobile_number_label_top" />
 
     <Spinner
         android:id="@+id/direct_number_select"
@@ -140,10 +140,10 @@
         android:foregroundTint="#E83E0F"
         android:textColor="#333333"
         android:textSize="@dimen/text_size_18"
-        app:layout_constraintBottom_toTopOf="@+id/guideline34"
+        app:layout_constraintBottom_toTopOf="@+id/password_label_top"
         app:layout_constraintEnd_toStartOf="@+id/guideline69"
-        app:layout_constraintStart_toStartOf="@+id/left_margin"
-        app:layout_constraintTop_toTopOf="@+id/guideline33" />
+        app:layout_constraintStart_toStartOf="@+id/left_margin_2"
+        app:layout_constraintTop_toTopOf="@+id/mobile_number_input_top" />
 
     <EditText
         android:id="@+id/mobile_number_input"
@@ -155,22 +155,22 @@
         android:textColor="#333333"
         android:textColorHint="#E83E0F"
         android:textSize="@dimen/text_size_24"
-        app:layout_constraintBottom_toTopOf="@+id/guideline34"
+        app:layout_constraintBottom_toTopOf="@+id/password_label_top"
         app:layout_constraintEnd_toStartOf="@+id/right_margin"
         app:layout_constraintStart_toStartOf="@+id/guideline69"
-        app:layout_constraintTop_toTopOf="@+id/guideline33" />
+        app:layout_constraintTop_toTopOf="@+id/mobile_number_input_top" />
 
     <TextView
         android:id="@+id/password_label"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="Password"
+        android:text="@string/login_label_password"
         android:textColor="#818181"
         android:textSize="@dimen/text_size_24"
-        app:layout_constraintBottom_toTopOf="@+id/guideline66"
+        app:layout_constraintBottom_toTopOf="@+id/password_label_bottom"
         app:layout_constraintEnd_toStartOf="@+id/right_margin"
-        app:layout_constraintStart_toStartOf="@+id/left_margin"
-        app:layout_constraintTop_toTopOf="@+id/guideline36" />
+        app:layout_constraintStart_toStartOf="@+id/left_margin_2"
+        app:layout_constraintTop_toTopOf="@+id/mobile_number_input_bottom" />
 
     <EditText
         android:id="@+id/password_input"
@@ -181,13 +181,13 @@
         android:inputType="textPassword"
         android:textColor="#333333"
         android:textSize="@dimen/text_size_24"
-        app:layout_constraintBottom_toTopOf="@+id/guideline31"
+        app:layout_constraintBottom_toTopOf="@+id/password_input_bottom"
         app:layout_constraintEnd_toStartOf="@+id/right_margin"
-        app:layout_constraintStart_toStartOf="@+id/left_margin"
-        app:layout_constraintTop_toTopOf="@+id/guideline66" />
+        app:layout_constraintStart_toStartOf="@+id/left_margin_2"
+        app:layout_constraintTop_toTopOf="@+id/password_label_bottom" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline68"
+        android:id="@+id/left_margin_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -220,13 +220,13 @@
         android:layout_height="0dp"
         android:background="#E83E0F"
         android:backgroundTint="#E83E0F"
-        android:text="@string/signInButtonText"
+        android:text="@string/login_button_sign_in"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/text_size_24"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline71"
         app:layout_constraintEnd_toStartOf="@+id/right_margin"
-        app:layout_constraintStart_toStartOf="@+id/left_margin"
+        app:layout_constraintStart_toStartOf="@+id/left_margin_2"
         app:layout_constraintTop_toTopOf="@+id/guideline70" />
 
     <TextView
@@ -235,14 +235,14 @@
         android:layout_height="0dp"
         android:layout_marginEnd="5dp"
         android:gravity="center_vertical"
-        android:text="Don't remember your password?"
+        android:text="@string/login_text_forgot_password"
         android:textAlignment="viewEnd"
         android:textColor="@color/login_page_font_color"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_size_14"
         app:layout_constraintBottom_toTopOf="@+id/bottom_margin"
         app:layout_constraintEnd_toStartOf="@+id/guideline72"
-        app:layout_constraintStart_toStartOf="@+id/left_margin"
-        app:layout_constraintTop_toTopOf="@+id/guideline35" />
+        app:layout_constraintStart_toStartOf="@+id/left_margin_2"
+        app:layout_constraintTop_toTopOf="@+id/remember_text_top" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline72"
@@ -256,14 +256,14 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center_vertical"
-        android:text="@string/sendSms"
+        android:text="@string/login_text_send_sms"
         android:textColor="#D12043"
         android:textSize="@dimen/text_size_18"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/bottom_margin"
         app:layout_constraintEnd_toStartOf="@+id/right_margin"
         app:layout_constraintStart_toStartOf="@+id/guideline72"
-        app:layout_constraintTop_toTopOf="@+id/guideline35" />
+        app:layout_constraintTop_toTopOf="@+id/remember_text_top" />
 
     <ImageButton
         android:id="@+id/show_password_button"
@@ -310,12 +310,12 @@
         app:srcCompat="@drawable/hide_pass_icon2" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/tickets_logo"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/tickets_logo_bottom"
         app:layout_constraintEnd_toStartOf="@+id/right_margin"
-        app:layout_constraintStart_toStartOf="@+id/left_margin"
+        app:layout_constraintStart_toStartOf="@+id/left_margin_2"
         app:layout_constraintTop_toTopOf="@+id/tickets_logo_top"
         app:srcCompat="@drawable/tickets_logo" />
 </androidx.constraintlayout.widget.ConstraintLayout>

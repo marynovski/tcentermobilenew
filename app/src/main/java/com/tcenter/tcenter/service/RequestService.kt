@@ -2,6 +2,7 @@ package com.tcenter.tcenter.service
 
 import android.content.Context
 import android.os.Environment
+import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -10,6 +11,7 @@ import org.json.JSONException
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
+import java.net.SocketException
 import java.net.URL
 import java.util.*
 

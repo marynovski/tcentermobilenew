@@ -2,17 +2,29 @@
     <string name="app_name">Tcenter</string>
     <string name="tickets_logo">Tickets!</string>
 
-    <string name="app_login_header_text_up_1">Sign In</string>
-    <string name="app_login_header_text_up_2">To Ticket Center</string>
-    <string name="logo_description">Application logo image</string>
-    <string name="logoFormText1">Mobile Number</string>
-    <string name="logoFormText2">Password</string>
-    <string name="signInButtonText">Sign In</string>
-    <string name="forgotPassInfo">Don\'t remember your password?</string>
-    <string name="sendSms">Send SMS</string>
-    <string name="showPass">SHOW</string>
-    <string name="hidePass">HIDE</string>
-    <string name="plusCross">+</string>
+    <!-- LOGIN -->
+        <!-- HEADERS -->
+        <string name="login_header_text_sign_in">Sign In</string>
+        <!-- LABELS -->
+        <string name="login_label_mobile_number">Mobile number</string>
+        <string name="login_label_password">Password</string>
+        <!-- BUTTONS -->
+        <string name="login_button_sign_in">Sign In</string>
+        <!-- OTHER -->
+        <string name="login_text_forgot_password">Don\'t remember your password?</string>
+        <string name="login_text_send_sms">Send SMS</string>
+    <!-- -->
+
+    <!-- TICKET LIST -->
+        <!-- HEADERS -->
+        <string name="tlist_ticket_type_header_to_do">To do</string>
+        <string name="tlist_ticket_type_header_solved">Solved</string>
+        <string name="tlist_ticket_type_header_sent_by_me">Sent by me</string>
+        <string name="tlist_ticket_type_header_sent_done">Sent done</string>
+        <!-- OTHER -->
+        <string name="tlist_cross">+</string>
+
+
     <string name="toDo">To do</string>
     <string name="solved">Solved</string>
     <string name="sentByMe">Sent by me</string>
