@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true"
-        tools:targetApi="n">
+        tools:targetApi="n"
+        android:requestLegacyExternalStorage="true">
         <activity android:name=".LoginActivity"></activity>
         <activity android:name=".ChatActivity" />
         <activity

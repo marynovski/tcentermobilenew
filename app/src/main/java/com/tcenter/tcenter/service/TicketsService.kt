@@ -20,12 +20,17 @@ import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.text.htmlEncode
+import androidx.core.text.parseAsHtml
 import com.tcenter.tcenter.R
 import com.tcenter.tcenter.TicketView
 import com.tcenter.tcenter.entity.Ticket
+import okio.Utf8
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.File
+import java.nio.charset.Charset
 
 
 //}http://www.tcenter.pl/api/v/mobile/get-tickets
@@ -39,6 +44,8 @@ class TicketsService {
         var jsonResponse: JSONObject = JSONObject("{}")
         val rs = RequestService()
         val response: String = rs.getTicketsRequest(userId, status, loadedTicketsCount-2, loadedTicketsCount+10)
+
+        println(response)
 
         var isResponseNull: Boolean
 
@@ -59,11 +66,12 @@ class TicketsService {
             for (i in 0 until json.length()) {
                 /** GENERATING CLICKABLE TICKETS PREVIEWS */
                 val ticket: JSONObject = json.getJSONObject(i)
-                println(ticket)
+                println("TICKET "+ticket)
 
                 val id: Int = ticket.getInt("id")
                 val topic: String = ticket.getString("topic")
                 var content: String = ticket.getString("content")
+//                val receiverId: Int = ticket.getString("receiverId").toInt()
 
                 if (content.length > 100) {
                     content = content.substring(0, 100)+"..."
@@ -165,6 +173,7 @@ class TicketsService {
         return jsonResponse
     }
 
+    @ExperimentalStdlibApi
     fun makeTicketView(ticketId: Int, userId: Int, activity: Activity, ticketStatus: Int)
     {
 
@@ -262,7 +271,7 @@ class TicketsService {
         messagesResponse = messagesResponse.substring(1, messagesResponse.length-1)
         messagesResponse = messagesResponse.replace("\\u0022", "\"")
         val messageJson = JSONObject(messagesResponse)
-        println(messageJson)
+        println("JSON MSG: $messageJson")
 
         val messages = messageJson.getJSONArray("data")
         for (i in 0 until messages.length())
@@ -270,27 +279,30 @@ class TicketsService {
             val messageData = JSONObject(messages[i].toString())
             val senderData = messageData.getJSONObject("recipient")
             val receiverData = messageData.getJSONObject("receiver")
-            val message = messageData.getJSONObject("messageData")
+            val message: JSONObject = JSONObject(messageData.getString("messageData"))
+            println("MESSAGES DATA: $message")
 
             val senderId = senderData.getInt("id")
-            val userId = 150
             val messageContent: String = message.getString("message")
+            println("MESSAGE: $messageContent")
             val messageTextView = TextView(activity.applicationContext)
             val messagesBoxLayout = activity.findViewById<LinearLayout>(R.id.messages_box_layout)
-            messageTextView.text = messageContent
+            messageTextView.text = String(messageContent.encodeToByteArray(), Charsets.UTF_8)
+            println("FUCK: $messageContent")
+            println("GREJT: "+String(messageContent.encodeToByteArray(), Charsets.UTF_16))
             messageTextView.setPadding(10, 10, 10, 10)
             val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT)
             if (senderId == userId) {
                 messageTextView.setBackgroundColor(Color.parseColor("#333333"))
                 messageTextView.setTextColor(Color.parseColor("#FFFFFF"))
                 params.setMargins(250, 5, 10, 5)
-                messageTextView.gravity = Gravity.END
+                params.gravity = Gravity.RIGHT
 
             } else {
                 messageTextView.setBackgroundColor(Color.parseColor("#818181"))
                 messageTextView.setTextColor(Color.parseColor("#333333"))
                 params.setMargins(10, 5, 250, 5)
-                messageTextView.gravity = Gravity.START
+                params.gravity = Gravity.LEFT
             }
             messageTextView.layoutParams = params
             messagesBoxLayout.addView(messageTextView)
@@ -316,8 +328,14 @@ class TicketsService {
 
     }
 
-    fun uploadAttachment(activity: Activity)
+    fun uploadAttachment(file: File, fileName: String?, ticketId: Int, receiverId: Int, userId: Int, activity: Activity)
     {
-
+        val rs = RequestService()
+        val response = rs.sendAttachmentRequest(ticketId, receiverId, userId, "", file, fileName)
+        if (response == "KO") {
+            Toast.makeText(activity.applicationContext, "$fileName upload failed", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(activity.applicationContext, "$fileName uploaded succesfully", Toast.LENGTH_SHORT).show()
+        }
     }
 }

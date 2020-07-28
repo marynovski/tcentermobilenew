@@ -1,13 +1,20 @@
 package com.tcenter.tcenter.service
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Environment
+import android.util.Xml
 import android.widget.Toast
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
+import androidx.core.content.ContextCompat
+import com.tcenter.tcenter.TicketView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import org.json.JSONException
+import org.json.JSONObject
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
@@ -644,6 +651,66 @@ class RequestService {
         }
 
         return@runBlocking jsonResponse
+    }
+
+    fun sendAttachmentRequest(ticketId: Int, receiverId: Int, recipientId: Int, message: String, file: File, fileName: String?): String
+    {
+        println("START SEND TEXT MESSAGE REQUEST")
+        var responseOk = "KO"
+        runBlocking {
+            val sendAttachmentRequestJob = async(Dispatchers.IO) { sendAttachmentRequestJob(ticketId, receiverId, recipientId, message, file, fileName) }
+
+            runBlocking(block = {
+                responseOk = sendAttachmentRequestJob.await()
+            })
+        }
+
+        println("FINISH SEND TEXT MESSAGE REQUEST")
+        return responseOk
+    }
+
+    fun sendAttachmentRequestJob(ticketId: Int, receiverId: Int, recipientId: Int, message: String, file: File, fileName: String?):String = runBlocking()
+    {
+        /** http://www.tcenter.pl/api/v/mobile/add-message */
+        val url: URL = URL("http://188.68.224.36:8194/api/v/mobile/add-message")
+        var responseOk: String = "KO"
+        try {
+            var client = OkHttpClient().newBuilder().build()
+            var mediaType = MediaType.parse("application/json; utf-8")
+            var body = MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addPart(MultipartBody.Part.createFormData("files", fileName, RequestBody.create(mediaType, file)))
+                .addFormDataPart("params", "{" +
+                        "\"ticketId\": $ticketId," +
+                        "\"receiverId\": $receiverId," +
+                        "\"recipientId\": \"$recipientId\"," +
+                        "\"type\": \"2\",\n" +
+                        "\"number\": \"10\",\n" +
+                        "\"message\": \"$fileName\"" +
+                        "}").build()
+            var request = Request.Builder()
+                .url(url)
+                .method("POST", body)
+                .addHeader("Content-Type", "application/json; utf-8")
+                .addHeader("Authorization", "7f137082d82368af5968aac4150b3854644b5957")
+                .addHeader("Accept", "application/json")
+                .addHeader("Charset", "utf-8")
+                .build()
+
+            var response = client.newCall(request).execute()
+            if (response.isSuccessful) {
+                responseOk = "OK"
+            }
+        } catch (e: MalformedURLException) {
+            e.printStackTrace()
+        }
+        catch (e: JSONException) {
+            e.printStackTrace()
+        }
+        catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return@runBlocking responseOk
     }
 
     companion object {
