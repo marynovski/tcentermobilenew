@@ -3,6 +3,7 @@ package com.tcenter.tcenter
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
@@ -30,6 +31,11 @@ class CreateTicketActivity : AppCompatActivity() {
         val contentInput: EditText = findViewById(R.id.contentInput)
         val deadlineDatePicker: DatePicker = findViewById(R.id.deadlineDatePicker)
         val submitBtn: Button = findViewById(R.id.submitBtn)
+        val backBtn: ImageView = findViewById(R.id.back_btn)
+
+        backBtn.setOnClickListener {
+            this.redirectToTicketListActivity()
+        }
 
         val deadlineDateFormat = SimpleDateFormat("YYYY-MM-dd")
         val deadlineTimeFormat = SimpleDateFormat("HH:mm")
@@ -97,5 +103,14 @@ class CreateTicketActivity : AppCompatActivity() {
         autocompletetextview.threshold = 0
         autocompletetextview.setAdapter(adapter)
         autocompletetextview.setOnFocusChangeListener { v, hasFocus -> if(hasFocus) autocompletetextview.showDropDown() }
+    }
+
+    /**
+     * After click back button - go to ticket list activity (default - To do tickets list)
+     */
+    private fun redirectToTicketListActivity()
+    {
+        val intent = Intent(this, TicketListActivity::class.java)
+        startActivity(intent)
     }
 }
